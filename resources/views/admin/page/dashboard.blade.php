@@ -168,51 +168,54 @@
                                     <!-- <button class="btn btn-success ml-2" data-toggle="modal" data-target="#importModalDetail">Import Detail Kunjungan</button> -->
                                     </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="font-size: 12px">
-                                        <thead>
-                                            <tr>
-                                                <th class="align-middle text-center">No.</th>
-                                                <th class="align-middle text-center">No. Rekam Medis</th>
-                                                <th class="align-middle text-center">Tanggal Ditambah</th>
-                                                <th class="align-middle text-center">Nama</th>
-                                                <th class="align-middle text-center">Jumlah Kunjungan</th>
-                                                <th class="align-middle text-center">Alamat</th>
-                                                <th class="align-middle text-center">Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th class="align-middle text-center">No.</th>
-                                                <th class="align-middle text-center">No. Rekam Medis</th>
-                                                <th class="align-middle text-center">Tanggal Ditambah</th>
-                                                <th class="align-middle text-center">Nama</th>
-                                                <th class="align-middle text-center">Jumlah Kunjungan</th>
-                                                <th class="align-middle text-center">Alamat</th>
-                                                <th class="align-middle text-center">Action</th>
-                                            </tr>
-                                        </tfoot>
-                                        <tbody>
-                                            @foreach($pasien as $pasiens)
-                                            <tr>
-                                                <td class="align-middle text-center">{{ $loop->iteration }}</td>
-                                                <td class="align-middle text-center">{{ $pasiens->norm }}</td>
-                                                <td class="align-middle text-center">{{ \Carbon\Carbon::parse($pasiens->tanggal)->format('d-m-Y') }}</td>
-                                                <td class="align-middle">{{ $pasiens->nama }}</td>
-                                                <td class="align-middle text-center">{{ $pasiens->kunjungan }}</td>
-                                                <td class="align-middle">{{ implode(', ', array_filter([$pasiens->kelurahan, $pasiens->kecamatan, $pasiens->kota])) }}</td>
-                                                <td class="align-middle">
-                                                <div class="d-flex ml-auto">
-                                                    <button style="font-size: 12px" class="btn btn-success ml-2 detail-btn" data-toggle="modal" data-target="#patientDetailModal" data-id="{{ $pasiens->id }}">Detail</button>                                  
-                                                    <button style="font-size: 12px" class="btn btn-danger ml-2 delete-btn" data-toggle="modal" data-id="{{ $pasiens->id }}">Delete</button>
-                                                </div>
-                                                </td>
-                                            </tr>    
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" style="font-size: 12px">
+                                            <thead>
+                                                <tr>
+                                                    <th class="align-middle text-center">No.</th>
+                                                    <th class="align-middle text-center">No. Rekam Medis</th>
+                                                    <th class="align-middle text-center">Tanggal Ditambah</th>
+                                                    <th class="align-middle text-center">Nama</th>
+                                                    <th class="align-middle text-center">Jumlah Kunjungan</th>
+                                                    <th class="align-middle text-center">Alamat</th>
+                                                    <th class="align-middle text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                <tr>
+                                                    <th class="align-middle text-center">No.</th>
+                                                    <th class="align-middle text-center">No. Rekam Medis</th>
+                                                    <th class="align-middle text-center">Tanggal Ditambah</th>
+                                                    <th class="align-middle text-center">Nama</th>
+                                                    <th class="align-middle text-center">Jumlah Kunjungan</th>
+                                                    <th class="align-middle text-center">Alamat</th>
+                                                    <th class="align-middle text-center">Action</th>
+                                                </tr>
+                                            </tfoot>
+                                            <tbody>
+                                                @php
+                                                    $counter = $pasien->count(); // Menghitung jumlah total pasien
+                                                @endphp
+                                                @foreach($pasien as $pasiens)
+                                                <tr>
+                                                    <td class="align-middle text-center">{{ $counter-- }}</td>
+                                                    <td class="align-middle text-center">{{ $pasiens->norm }}</td>
+                                                    <td class="align-middle text-center">{{ \Carbon\Carbon::parse($pasiens->tanggal)->format('d-m-Y') }}</td>
+                                                    <td class="align-middle">{{ $pasiens->nama }}</td>
+                                                    <td class="align-middle text-center">{{ $pasiens->kunjungan }}</td>
+                                                    <td class="align-middle">{{ implode(', ', array_filter([$pasiens->kelurahan, $pasiens->kecamatan, $pasiens->kota])) }}</td>
+                                                    <td class="align-middle">
+                                                    <div class="d-flex ml-auto">
+                                                        <button style="font-size: 12px" class="btn btn-success ml-2 detail-btn" data-toggle="modal" data-target="#patientDetailModal" data-id="{{ $pasiens->id }}">Detail</button>                                  
+                                                        <button style="font-size: 12px" class="btn btn-danger ml-2 delete-btn" data-toggle="modal" data-id="{{ $pasiens->id }}">Delete</button>
+                                                    </div>
+                                                    </td>
+                                                </tr>    
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                     
@@ -579,6 +582,12 @@
                          <!-- script modal tambah pasien start -->
                          
                         <script>
+                            $(document).ready( function() {
+                                   $('#dataTable').dataTable( {
+                                    "order": []
+                                  } );
+                                } );
+
                         $(document).ready(function() {
                         // Set CSRF token for all AJAX requests
                         $.ajaxSetup({

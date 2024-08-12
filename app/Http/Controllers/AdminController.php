@@ -18,7 +18,7 @@ class AdminController extends Controller
     
     public function view_customer()
     {
-        $pasien = Pasien::all();
+        $pasien = Pasien::orderBy('created_at', 'desc')->get();
         return view('admin.page.dashboard',compact('pasien'));
         
     }

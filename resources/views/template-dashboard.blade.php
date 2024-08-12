@@ -173,7 +173,7 @@
             <!-- <li class="nav-item {{ Request()->routeIs('halaman-analisis-alamat') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('halaman-analisis-alamat') }}">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>Alamat</span></a>
+                    <span>Lokasi</span></a>
             </li>
 
             <li class="nav-item {{ Request()->routeIs('halaman-analisis-kunjungan') ? 'active' : '' }}">
