@@ -122,14 +122,14 @@
             <li class="nav-item  {{ Request()->routeIs('dashboard-admin') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('dashboard-admin') }}">
                     <i class="fas fa-users"></i>
-                    <span>Customer</span></a>
+                    <span>Data Pasien</span></a>
             </li>
 
 
             <li class="nav-item {{ Request()->routeIs('halaman-list-dokter') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('halaman-list-dokter') }}">
                     <i class="fas fa-user-md"></i>
-                    <span>Dentis Dante</span></a>
+                    <span>Dentist Dante</span></a>
             </li>
 
 
@@ -161,7 +161,7 @@
             <li class="nav-item {{ Request()->routeIs('halaman-analisis-dokter') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('halaman-analisis-dokter') }}">
                     <i class="fas fa-stethoscope"></i>
-                    <span>Dentis</span></a>
+                    <span>Dentist</span></a>
             </li>
 
             <li class="nav-item {{ Request()->routeIs('halaman-analisis-service') ? 'active' : '' }}">

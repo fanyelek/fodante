@@ -14,7 +14,7 @@
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                                     <h6 class="m-0 font-weight-bold text-primary">Pasien Dante</h6>
                                     <div class="d-flex ml-auto">
-                                        <button class="btn btn-success ml-2 mr-4" data-toggle="modal" data-target="#addPatientModal" style="font-size: 14px">Tambah Pasien</button>
+                                        <button class="btn btn-success ml-2 mr-4" data-toggle="modal" data-target="#addPatientModal" style="font-size: 14px">Tambah Data</button>
 
                                         <div class="separator"></div>
 
@@ -248,11 +248,11 @@
 
 
                                                 <div class="form-group">
-                                                    <label for="customerName">Nama Customer</label>
+                                                    <label for="customerName">Nama Pasien</label>
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" id="searchPatient" placeholder="Masukkan nama yang ingin dicari" required autocomplete="off">
                                                         <div class="input-group-append">
-                                                            <button type="button" class="btn btn-primary add-customer-btn" data-toggle="modal" data-target="#addCustomerModal"><i class="fas fa-plus"></i> Customer</button>
+                                                            <button type="button" class="btn btn-primary add-customer-btn" data-toggle="modal" data-target="#addCustomerModal"><i class="fas fa-plus"></i> Pasien Baru</button>
                                                         </div>
                                                     </div>
                                                     <div id="namaSuggestions" class="suggestions-list"></div>
@@ -264,7 +264,7 @@
                                                         <input type="date" class="form-control" name="visitDate" id="visitDate" required autocomplete="off"> 
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label for="doctorName">Nama Dokter</label>
+                                                        <label for="doctorName">Nama Dentist</label>
                                                         <select class="form-control" id="doctorNameSelect" name="nama_dokter" placeholder="Pilih Dentist..." required autocomplete="off">
                                                             <option value="" disabled selected>Pilih Dentist...</option>
                                                         </select>
@@ -307,7 +307,7 @@
                             <div class="modal-dialog custom-modal-sedang" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title text-primary m-0 font-weight-bold" style="font-size: 18px" id="addCustomerModalLabel">Tambah Customer/Registrasi Customer</h5>
+                                        <h5 class="modal-title text-primary m-0 font-weight-bold" style="font-size: 18px" id="addCustomerModalLabel">Tambah Pasien/Registrasi Pasien</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -319,7 +319,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6" style="margin-top: 11px;">
                                                         <div class="form-group">
-                                                            <label for="namaCustomer">Nama Customer</label>
+                                                            <label for="namaCustomer">Nama Pasien</label>
                                                             <input type="text" name="nama" class="form-control" id="namaCustomer" placeholder="Masukkan Nama" required autocomplete="off">
                                                             @error('nama')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -543,7 +543,7 @@
                                                             <th class="align-middle text-center">Tanggal Visitasi</th>
                                                             <th class="align-middle text-center">Service</th>
                                                             <th class="align-middle text-center">Biaya</th>
-                                                            <th class="align-middle text-center">Dokter</th>
+                                                            <th class="align-middle text-center">Dentist</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
