@@ -27,8 +27,8 @@
                                                 display: inline-block; /* Agar elemen tampil sejajar dengan tombol */
                                             }
 
-                                            #addPatientModal ::placeholder {
-                                                color: rgba(0, 0, 0, 0.3); /* Mengatur warna font placeholder menjadi hitam dengan opacity 40% */
+                                            #addPatientModal ::placeholder, #addCustomerModal ::placeholder {
+                                                color: rgba(0, 0, 0, 0.5); /* Mengatur warna font placeholder menjadi hitam dengan opacity 40% */
                                                 font-size: 14px;
                                             }
 
@@ -320,6 +320,7 @@
                                                     <div class="col-md-6" style="margin-top: 11px;">
                                                         <div class="form-group">
                                                             <label for="namaCustomer">Nama Pasien</label>
+                                                            <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
                                                             <input type="text" name="nama" class="form-control" id="namaCustomer" placeholder="Masukkan Nama" required autocomplete="off">
                                                             @error('nama')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -327,6 +328,7 @@
                                                         </div>
                                                         <div class="form-group" style="margin-top: 26px;">
                                                             <label for="tanggalLahir">Tanggal Lahir</label>
+                                                            <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
                                                             <input type="date" name="lahir" class="form-control" id="tanggalLahir" required autocomplete="off">
                                                             @error('lahir')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -334,6 +336,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="email">Email</label>
+                                                            <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
                                                             <input type="email" name="email" class="form-control" id="email" placeholder="Masukkan Email" required autocomplete="off">
                                                             @error('email')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -341,6 +344,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="noTelepon">No. Telepon</label>
+                                                            <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
                                                             <input type="tel" name="telepon" class="form-control" id="noTelepon" placeholder="Masukkan No. Telepon" required autocomplete="off">
                                                             @error('telepon')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
