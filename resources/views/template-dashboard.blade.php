@@ -170,7 +170,7 @@
                     <span>Service</span></a>
             </li>
 
-            <!-- <li class="nav-item {{ Request()->routeIs('halaman-analisis-alamat') ? 'active' : '' }}">
+            <li class="nav-item {{ Request()->routeIs('halaman-analisis-alamat') ? 'active' : '' }}">
                 <a class="nav-link" href="{{ route('halaman-analisis-alamat') }}">
                     <i class="fas fa-map-marker-alt"></i>
                     <span>Lokasi</span></a>
@@ -180,7 +180,7 @@
                 <a class="nav-link" href="{{ route('halaman-analisis-kunjungan') }}">
                     <i class="fas fa-calendar-alt"></i>
                     <span>Kunjungan Per-Bulan</span></a>
-            </li> -->
+            </li>
 
             <!-- Divider -->
             <hr class="sidebar-divider">
