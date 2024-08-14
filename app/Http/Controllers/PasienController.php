@@ -9,6 +9,9 @@ use App\Models\Pasien;
 use App\Models\DetailServicePasien;
 use App\Models\DataDokter;
 use App\Models\DataService;
+use App\Models\Kota;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -28,16 +31,48 @@ class PasienController extends Controller
         // Validasi data
         $validatedData = $request->validate([
             'nama' => 'required|string|max:255',
+            'gender' => 'nullable|string|max:255',
             'lahir' => 'required|date',
-            'kelurahan' => 'nullable|string|max:255',
-            'kecamatan' => 'nullable|string|max:255',
-            'kota' => 'nullable|string|max:255',
+            'fulladdress' => 'nullable|string|max:255',
             'telepon' => 'required|string|max:20',
             'email' => 'required|string|email|max:255',
             'adminNote' => 'nullable|string',
             'rujukan' => 'nullable|string|max:255',
             ]);
         
+
+        $cekkota = Kota::where('nama_kota', $request->kota)->first();
+        $cekkecamatan = Kecamatan::where('nama_kecamatan', $request->kecamatan)->first();
+        $cekkelurahan = Kelurahan::where('nama_kelurahan', $request->kelurahan)->first();
+
+        if(!$cekkota){
+
+            Kota::create([
+                'nama_kota' => $request->kota,
+            ]);
+            $cekkota = Kota::where('nama_kota', $request->kota)->first();
+        }
+
+        if(!$cekkecamatan){
+
+            Kecamatan::create([
+                'nama_kecamatan' => $request->kecamatan,
+                'kota_id' =>$cekkota->id,
+            ]);
+            $cekkecamatan = Kecamatan::where('nama_kecamatan', $request->kecamatan)->first();
+        }
+
+        if(!$cekkelurahan){
+
+            Kelurahan::create([
+                'nama_kelurahan' => $request->kelurahan,
+                'kecamatan_id' => $cekkecamatan->id,
+                'kota_id' => $cekkota->id,
+            ]);
+            
+            $cekkelurahan = Kelurahan::where('nama_kelurahan', $request->kelurahan)->first();
+
+        }
             
             if (Pasien::exists()) {
 
@@ -82,6 +117,9 @@ class PasienController extends Controller
 
             }
 
+            $validatedData['kota'] = $cekkota->nama_kota;
+            $validatedData['kecamatan'] = $cekkecamatan->nama_kecamatan;
+            $validatedData['kelurahan'] = $cekkelurahan->nama_kelurahan;
             $validatedData['norm'] = $norm;
             $validatedData['age'] = $age;
             $validatedData['kunjungan'] = 0;

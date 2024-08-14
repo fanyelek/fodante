@@ -16,11 +16,13 @@ return new class extends Migration
             $table->string('norm'); // Nomor Rekam Medis
             $table->integer('kunjungan'); // Jumlah Kunjungan
             $table->string('nama'); // Nama
+            $table->string('gender'); // Nama
             $table->date('lahir'); // Tanggal Lahir
             $table->integer('age'); // Tanggal Lahir
             $table->text('kelurahan')->nullable(); // Alamat
             $table->text('kecamatan')->nullable(); // Alamat
             $table->text('kota')->nullable(); // Alamat
+            $table->text('fulladress')->nullable(); // Alamat
             $table->string('telepon'); // No Telepon
             $table->string('email'); // Email
             $table->text('adminNote')->nullable(); // Catatan

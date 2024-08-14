@@ -132,8 +132,8 @@
 
                                             /* untuk search alamat tambah pasien */
                                             .custom-form .search-input {
-                                                background-color: #e9ecef; /* Warna latar belakang berbeda */
-                                                border: 1px dashed #6c757d; /* Border berbeda */
+                                                background-color: #fff; /* Warna latar belakang berbeda */
+                                                border: 1px dashed #fff; /* Border berbeda */
                                                 color: #495057;
                                             }
 
@@ -248,7 +248,7 @@
 
 
                                                 <div class="form-group">
-                                                    <label for="customerName">Nama Pasien</label>
+                                                    <label for="customerName" style="color: black">Nama Pasien</label>
                                                     <div class="input-group">
                                                         <input type="text" class="form-control" id="searchPatient" placeholder="Masukkan nama yang ingin dicari" required autocomplete="off">
                                                         <div class="input-group-append">
@@ -260,11 +260,11 @@
                                                 <div id="customerDetail"></div>
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
-                                                        <label for="visitDate">Tanggal Kunjungan</label>
+                                                        <label for="visitDate" style="color: black">Tanggal Kunjungan</label>
                                                         <input type="date" class="form-control" name="visitDate" id="visitDate" required autocomplete="off"> 
                                                     </div>
                                                     <div class="form-group col-md-6">
-                                                        <label for="doctorName">Nama Dentist</label>
+                                                        <label for="doctorName" style="color: black">Nama Dentist</label>
                                                         <select class="form-control" id="doctorNameSelect" name="nama_dokter" placeholder="Pilih Dentist..." required autocomplete="off">
                                                             <option value="" disabled selected>Pilih Dentist...</option>
                                                         </select>
@@ -273,7 +273,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="service">Detail Service</label>
+                                                    <label for="service" style="color: black">Detail Service</label>
                                                     <div id="service-container">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control service-name" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
@@ -319,15 +319,30 @@
                                                 <div class="row">
                                                     <div class="col-md-6" style="margin-top: 11px;">
                                                         <div class="form-group">
-                                                            <label for="namaCustomer">Nama Pasien</label>
+                                                            <label for="namaCustomer" style="color: black">Nama Pasien</label>
                                                             <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
                                                             <input type="text" name="nama" class="form-control" id="namaCustomer" placeholder="Masukkan Nama" required autocomplete="off">
                                                             @error('nama')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
-                                                        <div class="form-group" style="margin-top: 26px;">
-                                                            <label for="tanggalLahir">Tanggal Lahir</label>
+
+                                                        <div class="form-group">
+                                                            <label for="gender" style="color: black">Jenis Kelamin</label>
+                                                            <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
+                                                            <select name="gender" id="gender" class="form-control" required>
+                                                                <option value="">Pilih Jenis Kelamin</option>
+                                                                <option value="laki-laki">Laki-Laki</option>
+                                                                <option value="perempuan">Perempuan</option>
+                                                                <option value="tidak-disebutkan">Tidak disebutkan</option>
+                                                            </select>
+                                                            @error('gender')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="form-group" style="margin-top: 0px;">
+                                                            <label for="tanggalLahir" style="color: black">Tanggal Lahir</label>
                                                             <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
                                                             <input type="date" name="lahir" class="form-control" id="tanggalLahir" required autocomplete="off">
                                                             @error('lahir')
@@ -335,7 +350,7 @@
                                                             @enderror
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="email">Email</label>
+                                                            <label for="email" style="color: black">Email</label>
                                                             <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
                                                             <input type="email" name="email" class="form-control" id="email" placeholder="Masukkan Email" required autocomplete="off">
                                                             @error('email')
@@ -343,7 +358,7 @@
                                                             @enderror
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="noTelepon">No. Telepon</label>
+                                                            <label for="noTelepon" style="color: black">No. Telepon</label>
                                                             <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
                                                             <input type="tel" name="telepon" class="form-control" id="noTelepon" placeholder="Masukkan No. Telepon" required autocomplete="off">
                                                             @error('telepon')
@@ -351,7 +366,7 @@
                                                             @enderror
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="rujukan">Rujukan</label autocomplete="off">
+                                                            <label for="rujukan" style="color: black">Rujukan</label autocomplete="off">
                                                             <input type="text" name="rujukan" class="form-control" id="rujukan" placeholder="Masukkan Rujukan">
                                                             @error('rujukan')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -359,7 +374,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <div class="form-group search-wrapper">
+                                                        <div class="form-group search-wrapper bg-primary text-white">
                                                             <label for="alamat">Cari Alamat</label>
                                                             <div class="input-group">
                                                                 <input type="text" name="alamat" class="form-control search-input" id="alamat" placeholder="Cari alamat" autocomplete="off">
@@ -369,29 +384,37 @@
                                                             </div>
                                                             <div id="alamatSuggestions" class="suggestions-list"></div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="kota">Kota</label>
+                                                        <div class="form-group" style="margin-top: -5px;">
+                                                            <label for="fulladdress" style="color: black">Alamat Lengkap</label>
+                                                            <input type="text" name="fulladdress" class="form-control" id="fulladdress" placeholder="Alamat lengkap" required autocomplete="off">
+                                                            @error('fulladdress')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group" style="margin-top: 14px;">
+                                                            <label for="kota" style="color: black">Kota</label>
+                                                            <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
                                                             <input type="text" name="kota" class="form-control" id="kota" placeholder="Kota" required autocomplete="off">
                                                             @error('kota')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="kecamatan">Kecamatan</label>
+                                                        <div class="form-group" style="margin-top: 19px;">
+                                                            <label for="kecamatan" style="color: black">Kecamatan</label>
                                                             <input type="text" name="kecamatan" class="form-control" id="kecamatan" placeholder="Kota/Kecamatan" autocomplete="off">
                                                             @error('kecamatan')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="kelurahan">Kelurahan</label>
+                                                            <label for="kelurahan" style="color: black">Kelurahan</label>
                                                             <input type="text" name="kelurahan" class="form-control" id="kelurahan" placeholder="Kelurahan" autocomplete="off">
                                                             @error('kelurahan')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="catatanAdmin">Catatan Admin</label>
+                                                            <label for="catatanAdmin" style="color: black">Catatan Admin</label>
                                                             <input type="text" name="adminNote" class="form-control" id="catatanAdmin" placeholder="Masukkan Catatan Admin" autocomplete="off">
                                                             @error('adminNote')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -521,6 +544,7 @@
                                                             <th class="align-middle text-center">No.</th>
                                                             <th class="align-middle text-center">No. Rekam Medis</th>
                                                             <th class="align-middle text-center">Nama</th>
+                                                            <th class="align-middle text-center">Gender</th>
                                                             <th class="align-middle text-center">Umur</th>
                                                             <th class="align-middle text-center">Alamat</th>
                                                             <th class="align-middle text-center">Tanggal Lahir</th>
@@ -615,6 +639,7 @@
                                             return `<div class="suggestion-item" 
                                                     data-norm="${item.norm}"
                                                     data-nama="${item.nama}"
+                                                    data-gender="${item.gender}"
                                                     data-lahir="${item.lahir}"
                                                     data-email="${item.email}"
                                                     data-telepon="${item.telepon}"
@@ -649,6 +674,7 @@
                         // Event handler untuk memilih saran nama pasien
                         $(document).on('click', '.suggestion-item', function() {
                             let selectedName = $(this).data('nama');
+                            let gender = $(this).data('gender');
                             let norm = $(this).data('norm');
                             let lahir = $(this).data('lahir');
                             let email = $(this).data('email');
@@ -793,6 +819,7 @@
                                                 <td class="align-middle text-center">${patient.id}</td>
                                                 <td class="align-middle text-center">${patient.norm}</td>
                                                 <td>${patient.nama}</td>
+                                                <td>${patient.gender}</td>
                                                 <td class="align-middle text-center">${patient.age}</td>
                                                 <td class="align-middle text-center">${[kelurahan, kecamatan, kota].filter(Boolean).join(', ')}</td>
                                                 <td>${patient.lahir}</td>
