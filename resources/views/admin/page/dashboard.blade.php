@@ -385,9 +385,9 @@
                                                             <div id="alamatSuggestions" class="suggestions-list"></div>
                                                         </div>
                                                         <div class="form-group" style="margin-top: -5px;">
-                                                            <label for="fulladdress" style="color: black">Alamat Lengkap</label>
-                                                            <input type="text" name="fulladdress" class="form-control" id="fulladdress" placeholder="Alamat lengkap" required autocomplete="off">
-                                                            @error('fulladdress')
+                                                            <label for="fulladress" style="color: black">Alamat Lengkap</label>
+                                                            <input type="text" name="fulladress" class="form-control" id="fulladress" placeholder="Alamat lengkap" required autocomplete="off">
+                                                            @error('fulladress')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>

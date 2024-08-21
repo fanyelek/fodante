@@ -39,21 +39,21 @@ class PasienImport implements ToModel
         }
         
         return new Pasien([
-            'norm'     => $norm,
+            'norm'     => $row[0],
             'tanggal'  => $row[1],
             'kunjungan'  => $row[2],
             'nama'     => $row[3],
             'lahir'    => $row[4],
             'age'      => $row[5],
-            'kelurahan'   => $row[14],
-            'kecamatan'   => $row[15],
-            'kota'   => $row[16],
-            'telepon'  => $row[7],
-            'email'    => $row[8],
-            'service'  => $row[9],
-            'biaya'    => $row[10],
-            'catatan'  => $row[12],
-            'rujukan'  => $row[13],
+            'gender'      => $row[6],
+            'fulladress'    => $row[7],
+            'kelurahan'   => $row[8],
+            'kecamatan'   => $row[9],
+            'kota'   => $row[10],
+            'telepon'  => $row[11],
+            'email'    => $row[12],
+            'adminNote'  => $row[13],
+            'rujukan'  => $row[14],
         ]);
     }
 }
