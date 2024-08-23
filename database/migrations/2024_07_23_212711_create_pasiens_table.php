@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pasiens', function (Blueprint $table) {
             $table->id();
             $table->string('norm'); // Nomor Rekam Medis
+            $table->date('tanggal'); // Tanggal Lahir
             // $table->integer('kunjungan'); // Jumlah Kunjungan
             $table->string('nama'); // Nama
             $table->date('lahir'); // Tanggal Lahir

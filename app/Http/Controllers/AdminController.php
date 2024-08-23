@@ -18,7 +18,7 @@ class AdminController extends Controller
     
     public function view_customer()
     {
-        $pasien = Pasien::withCount('detail_service_pasiens')->orderBy('created_at', 'desc')->get();
+        $pasien = Pasien::withCount('detail_service_pasiens')->orderBy('tanggal', 'desc')->get();
         return view('admin.page.dashboard',compact('pasien'));
         
     }

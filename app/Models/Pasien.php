@@ -11,6 +11,7 @@ class Pasien extends Model
     protected $fillable = [
         'norm',
         // 'kunjungan',
+        'tanggal',
         'nama',
         'gender',
         'lahir',
