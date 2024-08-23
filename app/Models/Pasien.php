@@ -10,7 +10,7 @@ class Pasien extends Model
     use HasFactory;
     protected $fillable = [
         'norm',
-        'kunjungan',
+        // 'kunjungan',
         'nama',
         'gender',
         'lahir',

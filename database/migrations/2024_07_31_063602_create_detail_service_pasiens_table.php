@@ -20,7 +20,9 @@ return new class extends Migration
             $table->date('tanggal');
             $table->unsignedBigInteger('service_id');
             $table->foreign('service_id')->references('id')->on('data_services')->onDelete('cascade');
-            $table->decimal('biaya', 10, 2);
+            $table->decimal('tarif', 10, 2);
+            $table->decimal('diskon_klinik', 10, 2);
+            $table->decimal('harga_bayar', 10, 2);
             $table->text('catatan')->nullable(); // Catatan
             $table->timestamps();
         });

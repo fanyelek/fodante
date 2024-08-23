@@ -203,7 +203,7 @@
                                                     <td class="align-middle text-center">{{ $pasiens->norm }}</td>
                                                     <td class="align-middle text-center">{{ \Carbon\Carbon::parse($pasiens->tanggal)->format('d-m-Y') }}</td>
                                                     <td class="align-middle">{{ $pasiens->nama }}</td>
-                                                    <td class="align-middle text-center">{{ $pasiens->kunjungan }}</td>
+                                                    <td class="align-middle text-center">{{ $pasiens->detail_service_pasiens_count }}</td>
                                                     <td class="align-middle">{{ implode(', ', array_filter([$pasiens->kelurahan, $pasiens->kecamatan, $pasiens->kota])) }}</td>
                                                     <td class="align-middle">
                                                     <div class="d-flex ml-auto">
@@ -793,74 +793,74 @@
 
                         <script>
                         $(document).ready(function() {
-                            $('.detail-btn').on('click', function() {
-                                let patientId = $(this).data('id');
+                        $('#dataTable').on('click', '.detail-btn', function() {
+                            let patientId = $(this).data('id');
 
-                                $.ajax({
-                                    url: '/get-patient-details/' + patientId,
-                                    method: 'GET',
-                                    success: function(response) {
-                                        let patient = response.pasien;
-                                        let services = response.services;
-                                        
-                                        let patientDetailTable = $('#patientDetailTable tbody');
-                                        let serviceDetailTable = $('#serviceDetailTable tbody');
-                                        let kelurahan = response.pasien.kelurahan;
-                                        let kecamatan = response.pasien.kecamatan;
-                                        let kota = response.pasien.kota;
-                                        
-                                        // Clear previous data
-                                        patientDetailTable.empty();
-                                        serviceDetailTable.empty();
-                                        
-                                        // Populate patient details
-                                        patientDetailTable.append(`
+                            $.ajax({
+                                url: '/get-patient-details/' + patientId,
+                                method: 'GET',
+                                success: function(response) {
+                                    let patient = response.pasien;
+                                    let services = response.services;
+                                    
+                                    let patientDetailTable = $('#patientDetailTable tbody');
+                                    let serviceDetailTable = $('#serviceDetailTable tbody');
+                                    let kelurahan = response.pasien.kelurahan;
+                                    let kecamatan = response.pasien.kecamatan;
+                                    let kota = response.pasien.kota;
+                                    
+                                    // Clear previous data
+                                    patientDetailTable.empty();
+                                    serviceDetailTable.empty();
+                                    
+                                    // Populate patient details
+                                    patientDetailTable.append(`
+                                        <tr>
+                                            <td class="align-middle text-center">${patient.id}</td>
+                                            <td class="align-middle text-center">${patient.norm}</td>
+                                            <td>${patient.nama}</td>
+                                            <td>${patient.gender}</td>
+                                            <td class="align-middle text-center">${patient.age}</td>
+                                            <td class="align-middle text-center">${[kelurahan, kecamatan, kota].filter(Boolean).join(', ')}</td>
+                                            <td>${patient.lahir}</td>
+                                            <td>${patient.email}</td>
+                                            <td>${patient.telepon}</td>
+                                            <td>${patient.rujukan}</td>
+                                        </tr>
+                                    `);
+                                    
+                                    // Populate services details
+                                    if (services.length === 0) {
+                                        serviceDetailTable.append(`
                                             <tr>
-                                                <td class="align-middle text-center">${patient.id}</td>
-                                                <td class="align-middle text-center">${patient.norm}</td>
-                                                <td>${patient.nama}</td>
-                                                <td>${patient.gender}</td>
-                                                <td class="align-middle text-center">${patient.age}</td>
-                                                <td class="align-middle text-center">${[kelurahan, kecamatan, kota].filter(Boolean).join(', ')}</td>
-                                                <td>${patient.lahir}</td>
-                                                <td>${patient.email}</td>
-                                                <td>${patient.telepon}</td>
-                                                <td>${patient.rujukan}</td>
+                                                <td colspan="5" class="text-center">Tidak ada data service tersedia</td>
                                             </tr>
                                         `);
-                                        
-                                        // Populate services details
-                                        if (services.length === 0) {
+                                    } else {
+                                        function formatRupiah(number) {
+                                            return new Intl.NumberFormat('id-ID', {
+                                                style: 'currency',
+                                                currency: 'IDR'
+                                            }).format(number);
+                                        }
+                                        // Mengisi tabel dengan data service jika ada
+                                        services.forEach(function(service, index) {
+                                            let formattedBiaya = formatRupiah(service.harga_bayar);
                                             serviceDetailTable.append(`
                                                 <tr>
-                                                    <td colspan="5" class="text-center">Tidak ada data service tersedia</td>
+                                                    <td class="align-middle text-center">${index + 1}</td>
+                                                    <td class="align-middle text-center">${service.tanggal}</td>
+                                                    <td class="align-middle text-center">${service.service.service}</td>
+                                                    <td class="align-middle text-center">${formattedBiaya}</td>
+                                                    <td class="align-middle text-center">${service.dentist.nama_dokter}</td>
                                                 </tr>
                                             `);
-                                        } else {
-                                            function formatRupiah(number) {
-                                                return new Intl.NumberFormat('id-ID', {
-                                                    style: 'currency',
-                                                    currency: 'IDR'
-                                                }).format(number);
-                                            }
-                                            // Mengisi tabel dengan data service jika ada
-                                            services.forEach(function(service, index) {
-                                                let formattedBiaya = formatRupiah(service.biaya);
-                                                serviceDetailTable.append(`
-                                                    <tr>
-                                                        <td class="align-middle text-center">${index + 1}</td>
-                                                        <td class="align-middle text-center">${service.tanggal}</td>
-                                                        <td class="align-middle text-center">${service.service.service}</td>
-                                                        <td class="align-middle text-center">${formattedBiaya}</td>
-                                                        <td class="align-middle text-center">${service.dentist.nama_dokter}</td>
-                                                    </tr>
-                                                `);
-                                            });
-                                        }
+                                        });
                                     }
-                                });
+                                }
                             });
                         });
+                    });
                         </script>
                         
                         <!-- script modal detail pasien end -->

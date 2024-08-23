@@ -40,8 +40,8 @@ class PasienImport implements ToModel
         
         return new Pasien([
             'norm'     => $row[0],
-            'tanggal'  => $row[1],
-            'kunjungan'  => $row[2],
+            // 'tanggal'  => $row[1],
+            // 'kunjungan'  => $row[2],
             'nama'     => $row[3],
             'lahir'    => $row[4],
             'age'      => $row[5],

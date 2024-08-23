@@ -9,7 +9,9 @@ class DetailServicePasien extends Model
 {
     use HasFactory;
     protected $fillable = ['tanggal',
-    'biaya',
+    'tarif',
+    'diskon_klinik',
+    'harga_bayar',
     'pasien_id',
     'dentist_id',
     'service_id',

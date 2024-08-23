@@ -13,15 +13,15 @@ class KunjunganImport implements ToModel
 {
     public function model(array $row)
     {
-        $pasien = Pasien::where('nama', $row[3])->first();
+        $pasien = Pasien::where('nama', $row[1])->first();
 
 
-        $id_dentist = DataDokter::where('nama_dokter', $row[11])
+        $id_dentist = DataDokter::where('nama_dokter', $row[3])
             ->first();
 
         if(!$id_dentist){
             $validated = [
-                'nama_dokter' => $row[11]];
+                'nama_dokter' => $row[3]];
 
                 $validator = Validator::make($validated, [
                     'nama_dokter' => 'required|string|max:255',
@@ -41,12 +41,12 @@ class KunjunganImport implements ToModel
         }
 
 
-        $id_service = DataService::where('service', $row[9])
+        $id_service = DataService::where('service', $row[2])
             ->first();
 
         if(!$id_service){
             $validated = [
-                'service' => $row[9]];
+                'service' => $row[2]];
 
                 $validator = Validator::make($validated, [
                     'service' => 'required|string|max:255',
@@ -65,19 +65,21 @@ class KunjunganImport implements ToModel
             DataService::create($validatedData);
         }
 
-        $id_dentist = DataDokter::where('nama_dokter', $row[11])
+        $id_dentist = DataDokter::where('nama_dokter', $row[3])
             ->first();
 
-        $id_service = DataService::where('service', $row[9])
+        $id_service = DataService::where('service', $row[2])
             ->first();
         // dd($id_dentist);
 
         return new DetailServicePasien([
             'pasien_id' => $pasien->id,
             'dentist_id' => $id_dentist->id,
-            'tanggal' => $row[1],
+            'tanggal' => $row[0],
             'service_id' => $id_service->id,
-            'biaya' => $row[10],
+            'tarif' => $row[4],
+            'diskon_klinik' => $row[5],
+            'harga_bayar' => $row[6],
             'catatan' => '-',
         ]);
     }
