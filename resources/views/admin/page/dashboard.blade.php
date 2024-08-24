@@ -177,7 +177,7 @@
                                                     <th class="align-middle text-center">No. Rekam Medis</th>
                                                     <th class="align-middle text-center">Tanggal Ditambah</th>
                                                     <th class="align-middle text-center">Nama</th>
-                                                    <th class="align-middle text-center">Jumlah Kunjungan</th>
+                                                    <th class="align-middle text-center">Jumlah Layanan</th>
                                                     <th class="align-middle text-center">Alamat</th>
                                                     <th class="align-middle text-center">Action</th>
                                                 </tr>
