@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('nama_kelurahan');
             $table->unsignedBigInteger('kecamatan_id');
             $table->foreign('kecamatan_id')->references('id')->on('kecamatans')->onDelete('cascade');
+            $table->unsignedBigInteger('kota_id');
+            $table->foreign('kota_id')->references('id')->on('kotas')->onDelete('cascade');
             $table->timestamps();
         });
     }

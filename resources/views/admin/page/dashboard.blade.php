@@ -430,10 +430,10 @@
                                                                 @enderror
                                                             </div>
 
-                                                            <div class="col-md-6">
+                                                            <div class="form-group col-md-6">
                                                                 <label for="norm" style="color: black">No Rekam Medis</label>
                                                                 <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
-                                                                <input type="text" name="norm" class="form-control" id="norm" autocomplete="off">
+                                                                <input type="text" name="norm" placeholder="No Rekam Medis" class="form-control" id="norm" autocomplete="off">
                                                                 @error('norm')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror

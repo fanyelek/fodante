@@ -22,7 +22,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(PasienSeeder::class);
+        $this->call(DataDentist::class);
+        $this->call(DataService::class);
         $this->call(KunjunganSeeder::class);
+        $this->call(DataKota::class);
+        $this->call(DataKecamatan::class);
+        $this->call(DataKelurahan::class);
 
     }
 }

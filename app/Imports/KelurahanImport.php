@@ -24,6 +24,7 @@ class KelurahanImport implements ToModel
             $kota = Kota::create([
                 'nama_kota' => $row[2],
             ]);
+            $kota = Kota::where('nama_kota', $row[2])->first();
         }
 
         // Mencari Kecamatan berdasarkan nama dan kota_id
@@ -44,10 +45,8 @@ class KelurahanImport implements ToModel
             [
                 'nama_kelurahan' => $row[0],
                 'kecamatan_id' => $kecamatan->id,
-            ],
-            [
                 'kota_id' => $kota->id,
-            ]
+            ],
         );
     }
 }
