@@ -77,31 +77,8 @@ class PasienController extends Controller
                 
                 $cekkelurahan = Kelurahan::where('nama_kelurahan', $request->kelurahan)->first();
             }
-
-        }
             
-            if (Pasien::exists()) {
-                // Ambil huruf pertama dari nama pasien
-                    $hurufDepan = strtoupper(substr($request->nama, 0, 1));
-                        
-                    // Cari nomor rekam medis terakhir yang memiliki huruf depan yang sama
-                    $lastPatient = Pasien::where('norm', 'like', $hurufDepan . '%')
-                        ->orderBy('norm', 'desc')
-                        ->first();
-
-                    if ($lastPatient) {
-                        // Pisahkan huruf dan angka dari norm terakhir
-                        $lastNumber = intval(substr($lastPatient->norm, 1));
-                        $newNumber = $lastNumber + 1;
-                    } else {
-                        // Jika belum ada pasien dengan huruf depan tersebut, mulai dari 1
-                        $newNumber = 1;
-
-                }
-            }
-
-            $norm = $hurufDepan . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
-
+        }
 
             $validatedData['kota'] = $cekkota->nama_kota;
             
@@ -113,7 +90,7 @@ class PasienController extends Controller
                 $validatedData['kelurahan'] = $cekkelurahan->nama_kelurahan;
             }
 
-            $validatedData['norm'] = $norm;
+            $validatedData['norm'] = $request->norm;
             $validatedData['age'] = $age;
             
             // dd($validatedData);
@@ -207,5 +184,23 @@ class PasienController extends Controller
     
         // Redirect ke halaman sebelumnya atau halaman lain
         return redirect()->back()->with('success', 'Data pasien berhasil disimpan.');
+    }
+
+    public function generateNorm(Request $request)
+    {
+        $firstLetter = strtoupper(substr($request->nama, 0, 1)); // Mengambil huruf pertama dari nama
+        $latestPatient = Pasien::where('norm', 'like', $firstLetter . '%')
+                            ->orderBy('norm', 'desc')
+                            ->first();
+
+        if ($latestPatient) {
+            $latestNorm = $latestPatient->norm;
+            $numberPart = intval(substr($latestNorm, 1)) + 1;
+            $newNorm = $firstLetter . str_pad($numberPart, 3, '0', STR_PAD_LEFT);
+        } else {
+            $newNorm = $firstLetter . '001';
+        }
+
+        return response()->json(['norm' => $newNorm]);
     }
 }

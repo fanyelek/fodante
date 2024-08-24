@@ -71,3 +71,4 @@ Route::post('/detail-service-pasien', [PasienController::class, 'store_layanan_p
 Route::get('/export-pasien', [PasienController::class, 'export'])->name('export.pasien');
 Route::post('/import-pasien', [PasienController::class, 'import'])->name('import.pasien');
 Route::get('/search-nama', [PasienController::class, 'searchNama']);
+Route::post('/generate-norm', [PasienController::class, 'generateNorm'])->name('generate-norm');

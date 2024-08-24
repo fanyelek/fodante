@@ -201,7 +201,7 @@
                                                 <tr>
                                                     <td class="align-middle text-center">{{ $counter-- }}</td>
                                                     <td class="align-middle text-center">{{ $pasiens->norm }}</td>
-                                                    <td class="align-middle text-center">{{ \Carbon\Carbon::parse($pasiens->tanggal)->format('d-m-Y') }}</td>
+                                                    <td class="align-middle text-center">{{ \Carbon\Carbon::parse($pasiens->created_at)->format('d-m-Y') }}</td>
                                                     <td class="align-middle">{{ $pasiens->nama }}</td>
                                                     <td class="align-middle text-center">{{ $pasiens->detail_service_pasiens_count }}</td>
                                                     <td class="align-middle">{{ implode(', ', array_filter([$pasiens->kelurahan, $pasiens->kecamatan, $pasiens->kota])) }}</td>
@@ -261,7 +261,7 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
                                                         <label for="visitDate" style="color: black">Tanggal Kunjungan</label>
-                                                        <input type="date" class="form-control" name="visitDate" id="visitDate" required autocomplete="off"> 
+                                                        <input type="date" class="form-control" name="visitDate" id="visitDate" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required autocomplete="off"> 
                                                     </div>
                                                     <div class="form-group col-md-6">
                                                         <label for="doctorName" style="color: black">Nama Dentist</label>
@@ -278,7 +278,7 @@
                                                         <div class="input-group">
                                                             <input type="text" class="form-control service-name" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
                                                             <input type="number" class="form-control service-cost" name="tarif[]" placeholder="Tarif" required autocomplete="off">
-                                                            <input type="text" class="form-control service-diskon" name="diskon_klinik[]" placeholder="Diskon Klinik" autocomplete="off">
+                                                            <input type="text" class="form-control service-diskon" name="diskon_klinik[]" value="0" autocomplete="off">
                                                             <input type="text" class="form-control service-bayar" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off">
                                                             <div class="input-group-append">
                                                                 <button type="button" class="btn btn-primary add-service-btn">+</button>
@@ -390,7 +390,7 @@
                                                             <div class="form-group" style="margin-top: -5px;">
                                                                 <label for="fulladress" style="color: black; margin-left: 10px">Alamat Lengkap</label>
                                                                 <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
-                                                                <input type="text" name="fulladress" class="form-control" id="fulladress" placeholder="Alamat lengkap" required autocomplete="off">
+                                                                <input style="margin-left: 5px; margin-right: 5px; width: calc(100% - 10px); box-sizing: border-box; background-color: white;" type="text" name="fulladress" class="form-control" id="fulladress" placeholder="Alamat lengkap" required autocomplete="off">
                                                                 @error('fulladress')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -398,7 +398,7 @@
                                                             <div class="form-group" style="margin-top: 14px;">
                                                                 <label for="kota" style="color: black; margin-left: 10px">Kota</label>
                                                                 <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
-                                                                <input type="text" name="kota" class="form-control" id="kota" placeholder="Kota" required autocomplete="off">
+                                                                <input style="margin-left: 5px; margin-right: 5px; width: calc(100% - 10px); box-sizing: border-box; background-color: white;" type="text" name="kota" class="form-control" id="kota" placeholder="Kota" required autocomplete="off">
                                                                 @error('kota')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -406,7 +406,7 @@
                                                             <div class="form-group" style="margin-top: 19px;">
                                                                 <label for="kecamatan" style="color: black; margin-left: 10px">Kecamatan</label>
                                                                 <span style="font-size: 14px; font-weight: 500; color: rgba(0, 0, 0, 0.5)">(Optional)</span>
-                                                                <input type="text" name="kecamatan" class="form-control" id="kecamatan" placeholder="Kota/Kecamatan" autocomplete="off">
+                                                                <input style="margin-left: 5px; margin-right: 5px; width: calc(100% - 10px); box-sizing: border-box; background-color: white;" type="text" name="kecamatan" class="form-control" id="kecamatan" placeholder="Kota/Kecamatan" autocomplete="off">
                                                                 @error('kecamatan')
                                                                     <div class="invalid-feedback">{{ $message }}</div>
                                                                 @enderror
@@ -420,13 +420,24 @@
                                                             <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
-                                                        <div class="form-group">
-                                                            <label for="tanggal" style="color: black">Tanggal Ditambah</label>
-                                                            <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
-                                                            <input type="date" name="tanggal" class="form-control" id="tanggal" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" autocomplete="off">
-                                                            @error('kelurahan')
-                                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                            @enderror
+                                                        <div class="form-group row">
+                                                            <div class="col-md-6">
+                                                                <label for="tanggal" style="color: black">Tanggal Ditambah</label>
+                                                                <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
+                                                                <input type="date" name="tanggal" class="form-control" id="tanggal" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" autocomplete="off">
+                                                                @error('tanggal')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <label for="norm" style="color: black">No Rekam Medis</label>
+                                                                <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
+                                                                <input type="text" name="norm" class="form-control" id="norm" autocomplete="off">
+                                                                @error('norm')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1052,5 +1063,43 @@
 
                         <!-- script untuk menambahkan service end -->
 
+
+
+
+
+
+
+                        <!-- script untuk menambah nomor rekam medis otomatis start -->
+
+
+                        <script>
+                        $(document).ready(function() {
+                            $('#namaCustomer').on('input', function() {
+                                let nama = $(this).val();
+
+                                if (nama.length > 0) {
+                                    $.ajax({
+                                        url: '{{ route('generate-norm') }}',
+                                        type: 'POST',
+                                        data: {
+                                            _token: '{{ csrf_token() }}',
+                                            nama: nama
+                                        },
+                                        success: function(response) {
+                                            $('#norm').val(response.norm);
+                                        },
+                                        error: function(xhr) {
+                                            console.log(xhr.responseText);
+                                        }
+                                    });
+                                } else {
+                                    $('#norm').val(''); // Kosongkan input norm jika nama kosong
+                                }
+                            });
+                        });
+                    </script>
+
+
+                        <!-- script untuk menambah nomor rekam medis otomatis end -->
 
                         @endsection
