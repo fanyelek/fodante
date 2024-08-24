@@ -135,7 +135,6 @@ class PasienController extends Controller
 
             $validatedData['norm'] = $norm;
             $validatedData['age'] = $age;
-            $validatedData['kunjungan'] = 0;
             
             // dd($validatedData);
 
@@ -225,8 +224,6 @@ class PasienController extends Controller
             // Perbarui jumlah kunjungan pasien
         }
 
-        $pasien->kunjungan = $pasien->kunjungan + 1;
-        $pasien->save();
     
         // Redirect ke halaman sebelumnya atau halaman lain
         return redirect()->back()->with('success', 'Data pasien berhasil disimpan.');
