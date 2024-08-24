@@ -31,6 +31,7 @@ class PasienController extends Controller
         // Validasi data
         $validatedData = $request->validate([
             'nama' => 'required|string|max:255',
+            'tanggal' => 'required|date',
             'gender' => 'nullable|string|max:255',
             'lahir' => 'required|date',
             'fulladdress' => 'nullable|string|max:255',
@@ -55,22 +56,27 @@ class PasienController extends Controller
 
         if(!$cekkecamatan){
 
-            Kecamatan::create([
-                'nama_kecamatan' => $request->kecamatan,
-                'kota_id' =>$cekkota->id,
-            ]);
-            $cekkecamatan = Kecamatan::where('nama_kecamatan', $request->kecamatan)->first();
+            if (!empty($request->kecamatan)) {
+                Kecamatan::create([
+                    'nama_kecamatan' => $request->kecamatan,
+                    'kota_id' => $cekkota->id,
+                ]);
+                $cekkecamatan = Kecamatan::where('nama_kecamatan', $request->kecamatan)->first();
+            }
+
         }
 
         if(!$cekkelurahan){
 
-            Kelurahan::create([
-                'nama_kelurahan' => $request->kelurahan,
-                'kecamatan_id' => $cekkecamatan->id,
-                'kota_id' => $cekkota->id,
-            ]);
-            
-            $cekkelurahan = Kelurahan::where('nama_kelurahan', $request->kelurahan)->first();
+            if (!empty($request->kelurahan)) {
+                Kelurahan::create([
+                    'nama_kelurahan' => $request->kelurahan,
+                    'kecamatan_id' => $cekkecamatan->id,
+                    'kota_id' => $cekkota->id,
+                ]);
+                
+                $cekkelurahan = Kelurahan::where('nama_kelurahan', $request->kelurahan)->first();
+            }
 
         }
             
@@ -118,8 +124,15 @@ class PasienController extends Controller
             }
 
             $validatedData['kota'] = $cekkota->nama_kota;
-            $validatedData['kecamatan'] = $cekkecamatan->nama_kecamatan;
-            $validatedData['kelurahan'] = $cekkelurahan->nama_kelurahan;
+            
+            if (!empty($request->kecamatan)) {
+                $validatedData['kecamatan'] = $cekkecamatan->nama_kecamatan;
+            }
+            
+            if (!empty($request->kelurahan)) {
+                $validatedData['kelurahan'] = $cekkelurahan->nama_kelurahan;
+            }
+
             $validatedData['norm'] = $norm;
             $validatedData['age'] = $age;
             $validatedData['kunjungan'] = 0;
@@ -160,6 +173,7 @@ class PasienController extends Controller
     
     public function store_layanan_pasien(Request $request)
     {
+        // dd($request);
         // Ambil pasien berdasarkan nama dan tanggal lahir
         $pasien = Pasien::where('nama', $request->nama)
             ->where('lahir', $request->lahir)
@@ -202,7 +216,9 @@ class PasienController extends Controller
                 'dentist_id' => $dentist->id,
                 'tanggal' => $formattedDate,
                 'service_id' => $serviceId,
-                'biaya' => $request->biaya[$index],
+                'tarif' => $request->tarif[$index],
+                'diskon_klinik' => $request->diskon_klinik[$index],
+                'harga_bayar' => $request->harga_bayar[$index],
                 'catatan' => $request->catatan[$index] ?? null,
             ]);
     

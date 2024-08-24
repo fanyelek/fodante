@@ -277,8 +277,9 @@
                                                     <div id="service-container">
                                                         <div class="input-group">
                                                             <input type="text" class="form-control service-name" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
-                                                            <input type="number" class="form-control service-cost" name="biaya[]" placeholder="Biaya" required autocomplete="off">
-                                                            <input type="text" class="form-control service-note" name="catatan[]" placeholder="Catatan" autocomplete="off">
+                                                            <input type="number" class="form-control service-cost" name="tarif[]" placeholder="Tarif" required autocomplete="off">
+                                                            <input type="text" class="form-control service-diskon" name="diskon_klinik[]" placeholder="Diskon Klinik" autocomplete="off">
+                                                            <input type="text" class="form-control service-bayar" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off">
                                                             <div class="input-group-append">
                                                                 <button type="button" class="btn btn-primary add-service-btn">+</button>
                                                             </div>
@@ -366,7 +367,8 @@
                                                             @enderror
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="rujukan" style="color: black">Rujukan</label autocomplete="off">
+                                                            <label for="rujukan" style="color: black">Rujukan</label autocomplete="off">                                                            
+                                                            <span style="font-size: 14px; font-weight: 500; color: rgba(0, 0, 0, 0.5)">(Optional)</span>
                                                             <input type="text" name="rujukan" class="form-control" id="rujukan" placeholder="Masukkan Rujukan">
                                                             @error('rujukan')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -374,49 +376,55 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <div class="form-group search-wrapper bg-primary text-white">
-                                                            <label for="alamat">Cari Alamat</label>
-                                                            <div class="input-group">
-                                                                <input type="text" name="alamat" class="form-control search-input" id="alamat" placeholder="Cari alamat" autocomplete="off">
-                                                                <div class="input-group-append">
-                                                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                                        <div style="background-color: rgba(0, 0, 0, 0.05); padding-right: px; padding-left: px; padding-bottom: px; border-radius: 5px">
+                                                            <div class="form-group search-wrapper bg-primary text-white">
+                                                                <label for="alamat">Cari Alamat</label>
+                                                                <div class="input-group">
+                                                                    <input type="text" name="alamat" class="form-control search-input" id="alamat" placeholder="Cari alamat" autocomplete="off">
+                                                                    <div class="input-group-append">
+                                                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                                                    </div>
                                                                 </div>
+                                                                <div id="alamatSuggestions" class="suggestions-list"></div>
                                                             </div>
-                                                            <div id="alamatSuggestions" class="suggestions-list"></div>
-                                                        </div>
-                                                        <div class="form-group" style="margin-top: -5px;">
-                                                            <label for="fulladress" style="color: black">Alamat Lengkap</label>
-                                                            <input type="text" name="fulladress" class="form-control" id="fulladress" placeholder="Alamat lengkap" required autocomplete="off">
-                                                            @error('fulladress')
-                                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="form-group" style="margin-top: 14px;">
-                                                            <label for="kota" style="color: black">Kota</label>
-                                                            <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
-                                                            <input type="text" name="kota" class="form-control" id="kota" placeholder="Kota" required autocomplete="off">
-                                                            @error('kota')
-                                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="form-group" style="margin-top: 19px;">
-                                                            <label for="kecamatan" style="color: black">Kecamatan</label>
-                                                            <input type="text" name="kecamatan" class="form-control" id="kecamatan" placeholder="Kota/Kecamatan" autocomplete="off">
-                                                            @error('kecamatan')
-                                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="kelurahan" style="color: black">Kelurahan</label>
-                                                            <input type="text" name="kelurahan" class="form-control" id="kelurahan" placeholder="Kelurahan" autocomplete="off">
-                                                            @error('kelurahan')
-                                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                            @enderror
+                                                            <div class="form-group" style="margin-top: -5px;">
+                                                                <label for="fulladress" style="color: black; margin-left: 10px">Alamat Lengkap</label>
+                                                                <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
+                                                                <input type="text" name="fulladress" class="form-control" id="fulladress" placeholder="Alamat lengkap" required autocomplete="off">
+                                                                @error('fulladress')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="form-group" style="margin-top: 14px;">
+                                                                <label for="kota" style="color: black; margin-left: 10px">Kota</label>
+                                                                <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
+                                                                <input type="text" name="kota" class="form-control" id="kota" placeholder="Kota" required autocomplete="off">
+                                                                @error('kota')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="form-group" style="margin-top: 19px;">
+                                                                <label for="kecamatan" style="color: black; margin-left: 10px">Kecamatan</label>
+                                                                <span style="font-size: 14px; font-weight: 500; color: rgba(0, 0, 0, 0.5)">(Optional)</span>
+                                                                <input type="text" name="kecamatan" class="form-control" id="kecamatan" placeholder="Kota/Kecamatan" autocomplete="off">
+                                                                @error('kecamatan')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="catatanAdmin" style="color: black">Catatan Admin</label>
+                                                            <span style="font-size: 14px; font-weight: 500; color: rgba(0, 0, 0, 0.5)">(Optional)</span>
                                                             <input type="text" name="adminNote" class="form-control" id="catatanAdmin" placeholder="Masukkan Catatan Admin" autocomplete="off">
                                                             @error('adminNote')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="tanggal" style="color: black">Tanggal Ditambah</label>
+                                                            <span style="font-size: 18px; font-weight: 500; color: red">ⓘ</span>
+                                                            <input type="date" name="tanggal" class="form-control" id="tanggal" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" autocomplete="off">
+                                                            @error('kelurahan')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
                                                         </div>
@@ -610,11 +618,11 @@
                          <!-- script modal tambah pasien start -->
                          
                         <script>
-                            $(document).ready( function() {
-                                   $('#dataTable').dataTable( {
-                                    "order": []
-                                  } );
-                                } );
+                        $(document).ready( function() {
+                            $('#dataTable').dataTable( {
+                            "order": []
+                            } );
+                        } );
 
                         $(document).ready(function() {
                         // Set CSRF token for all AJAX requests
@@ -763,9 +771,10 @@
 
                             $('#service-container').html(`
                                 <div class="input-group">
-                                    <input type="text" class="form-control service-name mt-4" name="service[]" placeholder="Masukkan Service" autocomplete="off" required>
-                                    <input type="number" class="form-control service-cost mt-4" name="biaya[]" placeholder="Biaya" autocomplete="off" required>
-                                    <input type="text" class="form-control service-note mt-4" name="catatan[]" placeholder="Catatan" autocomplete="off">
+                                    <input type="text" class="form-control service-name mt-4" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
+                                    <input type="number" class="form-control service-cost mt-4" name="tarif[]" placeholder="Tarif" required autocomplete="off">
+                                    <input type="text" class="form-control service-diskon mt-4" name="diskon_klinik[]" placeholder="Diskon Klinik" autocomplete="off">
+                                    <input type="text" class="form-control service-bayar mt-4" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-primary add-service-btn mt-4">+</button>
                                     </div>
@@ -982,9 +991,10 @@
                         $('#service-container').on('click', '.add-service-btn', function() {
                             var newService = `
                                 <div class="input-group">
-                                    <input type="text" class="form-control service-name mt-4" name="service[]" placeholder="Masukkan Service" autocomplete="off" required>
-                                    <input type="number" class="form-control service-cost mt-4" name="biaya[]" placeholder="Biaya" autocomplete="off" required>
-                                    <input type="text" class="form-control service-note mt-4" name="catatan[]" placeholder="Catatan" autocomplete="off">
+                                    <input type="text" class="form-control service-name mt-4" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
+                                    <input type="number" class="form-control service-cost mt-4" name="tarif[]" placeholder="Tarif" required autocomplete="off">
+                                    <input type="text" class="form-control service-diskon mt-4" name="diskon_klinik[]" placeholder="Diskon Klinik" autocomplete="off">
+                                    <input type="text" class="form-control service-bayar mt-4" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off">
                                     <div class="input-group-append">
                                         <button type="button" class="btn btn-danger remove-service-btn mt-4">-</button>
                                     </div>
