@@ -81,47 +81,27 @@ class PasienController extends Controller
         }
             
             if (Pasien::exists()) {
+                // Ambil huruf pertama dari nama pasien
+                    $hurufDepan = strtoupper(substr($request->nama, 0, 1));
+                        
+                    // Cari nomor rekam medis terakhir yang memiliki huruf depan yang sama
+                    $lastPatient = Pasien::where('norm', 'like', $hurufDepan . '%')
+                        ->orderBy('norm', 'desc')
+                        ->first();
 
-                $dataTerakhir = Pasien::orderBy('id', 'desc')->first();
-                $teks = $dataTerakhir->norm;
-                
-                function pisahkan_huruf_angka($teks) {
-                    // Regular ekspresi untuk mencocokkan huruf dan angka
-                    preg_match('/([a-zA-Z]+)([0-9]+)/', $teks, $matches);
-                
-                    // Mengembalikan hasil dalam bentuk array
-                    return $matches;
+                    if ($lastPatient) {
+                        // Pisahkan huruf dan angka dari norm terakhir
+                        $lastNumber = intval(substr($lastPatient->norm, 1));
+                        $newNumber = $lastNumber + 1;
+                    } else {
+                        // Jika belum ada pasien dengan huruf depan tersebut, mulai dari 1
+                        $newNumber = 1;
+
                 }
-            
-                function tambahAngkaDenganFormat($huruf, $angka, $jumlah_digit) {
-                    // Ubah angka menjadi integer
-                    $angka_int = (int)$angka;
-                
-                    // Tambahkan 1
-                    $angka_int++;
-                
-                    // Format ulang angka menjadi string dengan jumlah digit yang ditentukan
-                    $angka_baru = str_pad($angka_int, $jumlah_digit, '0', STR_PAD_LEFT);
-                
-                    // Gabungkan kembali huruf dan angka baru
-                    return $huruf . $angka_baru;
-                }
-                // Contoh penggunaan
-                $hasil = pisahkan_huruf_angka($teks);
-                
-                $huruf = $hasil[1];
-                $angka = $hasil[2];
-
-                
-
-                $jumlah_digit = 4; // Jumlah digit yang ingin dipertahankan
-
-                $norm = tambahAngkaDenganFormat($huruf, $angka, $jumlah_digit);
-
-            } else {
-                $norm = 'A'. '0001';
-
             }
+
+            $norm = $hurufDepan . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
 
             $validatedData['kota'] = $cekkota->nama_kota;
             
