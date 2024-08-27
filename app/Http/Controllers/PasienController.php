@@ -210,4 +210,51 @@ class PasienController extends Controller
         $pasien = Pasien::findOrFail($id);
         return response()->json($pasien);
     }
+
+    
+
+
+    public function update(Request $request){
+        // Validasi input
+        $request->validate([
+            'id' => 'required|integer|exists:pasiens,id',
+            'norm' => 'required|string|max:255',
+            'tanggal' => 'required|date',
+            'nama' => 'required|string|max:255',
+            'lahir' => 'required|date',
+            'age' => 'required|integer',
+            'gender' => 'required|string|max:255',
+            'kota' => 'required|string|max:255',
+            'telepon' => 'required|string|max:15',
+            'email' => 'required|email|max:255',
+        ]);
+
+        // Cari pasien berdasarkan ID
+        $pasien = Pasien::findOrFail($request->id);
+
+        // Update data pasien
+        $pasien->norm = $request->norm;
+        $pasien->tanggal = $request->tanggal;
+        $pasien->nama = $request->nama;
+        $pasien->lahir = $request->lahir;
+        $pasien->age = $request->age;
+        $pasien->gender = $request->gender;
+        $pasien->kelurahan = $request->kelurahan;
+        $pasien->kecamatan = $request->kecamatan;
+        $pasien->kota = $request->kota;
+        $pasien->telepon = $request->telepon;
+        $pasien->email = $request->email;
+        $pasien->fulladress = $request->fulladress;
+        $pasien->adminNote = $request->adminNote;
+        $pasien->rujukan = $request->rujukan;
+
+        // Simpan perubahan
+        $pasien->save();
+
+        // Redirect atau response sesuai kebutuhan
+        return redirect()->back()->with('success', 'Data pasien berhasil diperbarui.');
+    
+
+    }
+    
 }

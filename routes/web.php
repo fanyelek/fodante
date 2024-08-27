@@ -73,3 +73,4 @@ Route::post('/import-pasien', [PasienController::class, 'import'])->name('import
 Route::get('/search-nama', [PasienController::class, 'searchNama']);
 Route::post('/generate-norm', [PasienController::class, 'generateNorm'])->name('generate-norm');
 Route::get('/pasien/{id}', [PasienController::class, 'getPasien'])->name('get-pasien');//untuk pencarian yang akan digunakan untuk edit profile pasien
+Route::post('/update-pasien', [PasienController::class, 'update'])->name('pasien.update');

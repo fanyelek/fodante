@@ -655,16 +655,26 @@
                                         <!-- Card for Patient Details -->
                                          
                                         <div class="container">
-                                            <form action="" method="POST" id="editProfilePasien" class="custom-form">
+                                            <form action="{{ route('pasien.update') }}" method="POST" id="editProfilePasien" class="custom-form">
                                                 @csrf
                                                 <div class="row">
                                                     <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label for="editnamaCustomer" style="color: black">Nama Pasien</label>
-                                                            <input type="text" name="nama" class="form-control" id="editnamaCustomer" required autocomplete="off">
-                                                            @error('nama')
-                                                                <div class="invalid-feedback">{{ $message }}</div>
-                                                            @enderror
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3">
+                                                                <label for="IdPasien" style="color: black">Id Database</label>
+                                                                <input style="color: red; background-color: #edf5ff" type="text" name="id" class="form-control" id="IdPasien" required readonly>
+                                                                @error('nama')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            
+                                                            <div class="col-md-9">
+                                                                <label for="editnamaCustomer" style="color: black">Nama Pasien</label>
+                                                                <input type="text" name="nama" class="form-control" id="editnamaCustomer" required autocomplete="off">
+                                                                @error('nama')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
                                                         </div>
 
                                                         <div class="form-group">
@@ -768,7 +778,6 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeEditCustomerFormBtn">Close</button>
-                                                    <button type="button" class="btn btn-danger" id="resetCustomerFormBtn">Reset Form</button>
                                                     <button type="submit" class="btn btn-success">Save changes</button>
                                                 </div>
                                             </form>
@@ -964,12 +973,12 @@
 
                             $('#service-container').html(`
                                 <div class="input-group">
-                                    <input type="text" class="form-control service-name mt-4" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
-                                    <input type="number" class="form-control service-cost mt-4" name="tarif[]" placeholder="Tarif" required autocomplete="off">
-                                    <input type="text" class="form-control service-diskon mt-4" name="diskon_klinik[]" placeholder="Diskon Klinik" autocomplete="off">
-                                    <input type="text" class="form-control service-bayar mt-4" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off">
+                                    <input type="text" class="form-control service-name" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
+                                    <input type="number" class="form-control service-cost" name="tarif[]" placeholder="Tarif" required autocomplete="off">
+                                    <input type="text" class="form-control service-diskon" name="diskon_klinik[]" value="0" placeholder="Diskon Klinik" autocomplete="off">
+                                    <input type="text" class="form-control service-bayar" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off">
                                     <div class="input-group-append">
-                                        <button type="button" class="btn btn-primary add-service-btn mt-4">+</button>
+                                        <button type="button" class="btn btn-primary add-service-btn">+</button>
                                     </div>
                                 </div>
                                 <div class="service-suggestions suggestions-list"></div>
@@ -1022,7 +1031,7 @@
                                         
                                         let tambahTombol = $('#tambahTombol');
                                         tambahTombol.append(`
-                                        <td><button style="font-size: 14px" class="d-flex ml-auto btn btn-success ml-2 edit-detail-btn" data-toggle="modal" data-target="#editPatientDetailModal" data-id="${patient.id}">Edit</button></td>
+                                        <td><button style="font-size: 14px" class="d-flex ml-auto btn btn-success ml-2 edit-detail-btn" data-toggle="modal" data-target="#editPatientDetailModal" data-id="${patient.id}">Edit Profile Pasien</button></td>
                                         `);
 
                                         // Populate patient details
@@ -1093,6 +1102,7 @@
 
                                         
                                         // Mengisi value di masing-masing input
+                                        $('#IdPasien').val(response.id);
                                         $('#editnamaCustomer').val(response.nama);
                                         $('#editgender').val(response.gender);
                                         $('#edittanggalLahir').val(response.lahir);
