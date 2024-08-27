@@ -51,7 +51,7 @@
 
                                             .suggestion-item {
                                                 padding: 8px;
-                                                border-bottom: 1px solid #ddd; /* Garis pembatas samar */
+                                                border-bottom: 1px solid #4e73df; /* Garis pembatas samar */
                                                 display: flex;
                                                 flex-direction: column; /* Membuat flex-direction menjadi column untuk menyusun nama di atas dan dua kolom di bawahnya */
                                                 box-sizing: border-box; /* Menggunakan box-sizing untuk memastikan border dan padding termasuk dalam lebar */
@@ -147,6 +147,25 @@
                                                 padding: 10px;
                                                 border-radius: 5px;
                                             }
+
+                                            /* Mengatur z-index backdrop modal pertama */
+                                            .modal-backdrop.show:first-of-type {
+                                                z-index: 1049;
+                                            }
+
+                                            /* Mengatur z-index untuk modal kedua agar di atas modal pertama */
+                                            .modal.show + .modal-backdrop {
+                                                z-index: 1050;
+                                            }
+
+                                            /* Mengatur z-index modal kedua */
+                                            .modal.show + .modal {
+                                                z-index: 1060;
+                                            }
+
+                                            #editPatientDetailModal {
+                                                z-index: 1060; /* Z-index lebih tinggi dari modal pertama */
+                                            }   
                                         </style>
 
 
@@ -539,13 +558,18 @@
 
                          <!-- End Modal Import -->
 
+
+
+
+                         
+
                          <!-- Modal Detail Start  -->
 
                          <div class="modal fade" id="patientDetailModal" tabindex="-1" role="dialog" aria-labelledby="patientDetailModalLabel" aria-hidden="true">
-                            <div class="modal-dialog custom-modal-lg" role="document">
+                            <div class="modal-dialog custom-modal-lg-detail" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="patientDetailModalLabel">Detail Pasien</h5>
+                                        <h5 class="modal-title text-primary font-weight-bold" id="patientDetailModalLabel">Detail Pasien</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -553,14 +577,17 @@
                                     <div class="modal-body">
                                         <!-- Card for Patient Details -->
                                         <div class="card mb-4">
-                                            <div class="card-header">
-                                                <h6 class="m-0 font-weight-bold text-primary">Data Pasien</h6>
+                                            <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                                <h6 class="m-0 font-weight-bold text-primary ">Data Pasien</h6>
+                                                <div class="d-flex ml-auto" id="tambahTombol">
+                                                    <!-- Seharusnya Tombol edit disini, tapi digantikan dinamis menggunakan javascript -->
+                                                </div>
                                             </div>
                                             <div class="card-body">
                                                 <table class="table table-bordered" id="patientDetailTable" width="100%" cellspacing="0" style="font-size: 12px">
                                                     <thead>
                                                         <tr>
-                                                            <th class="align-middle text-center">No.</th>
+                                                            <th class="align-middle text-center">ID</th>
                                                             <th class="align-middle text-center">No. Rekam Medis</th>
                                                             <th class="align-middle text-center">Nama</th>
                                                             <th class="align-middle text-center">Gender</th>
@@ -570,6 +597,8 @@
                                                             <th class="align-middle text-center">Email</th>
                                                             <th class="align-middle text-center">No Telepon</th>
                                                             <th class="align-middle text-center">Rujukan</th>
+                                                            <th class="align-middle text-center">Catatan</th>
+                                                            <th class="align-middle text-center">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -600,8 +629,151 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="ClosePatientDetailModal">Close</button>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Detail Ends  -->
+
+
+
+
+                         <!-- Modal Edit Detail Pasien Start  -->
+
+                         <div class="modal fade" id="editPatientDetailModal" tabindex="-1" role="dialog" aria-labelledby="editPatientDetailModalLabel" aria-hidden="true">
+                            <div class="modal-dialog custom-modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title text-primary font-weight-bold" id="editPatientDetailModalLabel">Edit Profile Pasien</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Card for Patient Details -->
+                                         
+                                        <div class="container">
+                                            <form action="" method="POST" id="editProfilePasien" class="custom-form">
+                                                @csrf
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="editnamaCustomer" style="color: black">Nama Pasien</label>
+                                                            <input type="text" name="nama" class="form-control" id="editnamaCustomer" required autocomplete="off">
+                                                            @error('nama')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="gender" style="color: black">Jenis Kelamin</label>
+                                                            <select name="gender" id="editgender" class="form-control" required>
+                                                                <option value="">Pilih Jenis Kelamin</option>
+                                                                <option value="laki-laki">Laki-Laki</option>
+                                                                <option value="perempuan">Perempuan</option>
+                                                                <option value="unknown">Unknown</option>
+                                                            </select>
+                                                            @error('gender')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+
+                                                        <div class="form-group" style="margin-top: 0px;">
+                                                            <label for="tanggalLahir" style="color: black">Tanggal Lahir</label>
+                                                            <input type="date" name="lahir" class="form-control" id="edittanggalLahir" value="" required autocomplete="off">
+                                                            @error('lahir')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group" style="margin-top: 0px;">
+                                                            <label for="tanggalLahir" style="color: black">Umur</label>
+                                                            <input type="number" name="age" class="form-control" id="editage" autocomplete="off" readonly>
+                                                            @error('age')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="email" style="color: black">Email</label>
+                                                            <input type="email" name="email" class="form-control" id="editemail" placeholder="Masukkan Email" required autocomplete="off">
+                                                            @error('email')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="noTelepon" style="color: black">No. Telepon</label>
+                                                            <input type="tel" name="telepon" class="form-control" id="editnoTelepon" placeholder="Masukkan No. Telepon" required autocomplete="off">
+                                                            @error('telepon')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="rujukan" style="color: black">Rujukan</label autocomplete="off">
+                                                            <input type="text" name="rujukan" class="form-control" id="editrujukan" placeholder="Masukkan Rujukan">
+                                                            @error('rujukan')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div>
+                                                            <div class="form-group">
+                                                                <label for="fulladress" style="color: black; margin-left: 10px">Alamat Lengkap</label>
+                                                                <input style="margin-left: 5px; margin-right: 5px; width: calc(100% - 10px); box-sizing: border-box;" type="text" name="fulladress" class="form-control" id="editfulladress" placeholder="Alamat lengkap" required autocomplete="off">
+                                                                @error('fulladress')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="form-group" style="margin-top: 14px;">
+                                                                <label for="kota" style="color: black; margin-left: 10px">Kota</label>
+                                                                <input style="margin-left: 5px; margin-right: 5px; width: calc(100% - 10px); box-sizing: border-box;" type="text" name="kota" class="form-control" id="editkota" placeholder="Kota" required autocomplete="off">
+                                                                @error('kota')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="form-group" style="margin-top: 19px;">
+                                                                <label for="kecamatan" style="color: black; margin-left: 10px">Kecamatan</label>
+                                                                <input style="margin-left: 5px; margin-right: 5px; width: calc(100% - 10px); box-sizing: border-box;" type="text" name="kecamatan" class="form-control" id="editkecamatan" placeholder="Kecamatan" autocomplete="off">
+                                                                @error('kecamatan')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="catatanAdmin" style="color: black">Catatan Admin</label>
+                                                            <input type="text" name="adminNote" class="form-control" id="editcatatanAdmin" placeholder="Masukkan Catatan Admin" autocomplete="off">
+                                                            @error('adminNote')
+                                                            <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-md-6">
+                                                                <label for="tanggal" style="color: black">Tanggal Ditambah</label>
+                                                                <input type="date" name="tanggal" class="form-control" id="edittanggal" autocomplete="off">
+                                                                @error('tanggal')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+
+                                                            <div class="form-group col-md-6">
+                                                                <label for="norm" style="color: black">No Rekam Medis</label>
+                                                                <input type="text" name="norm" placeholder="No Rekam Medis" class="form-control" id="editnorm" autocomplete="off">
+                                                                @error('norm')
+                                                                    <div class="invalid-feedback">{{ $message }}</div>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeEditCustomerFormBtn">Close</button>
+                                                    <button type="button" class="btn btn-danger" id="resetCustomerFormBtn">Reset Form</button>
+                                                    <button type="submit" class="btn btn-success">Save changes</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -610,6 +782,10 @@
 
                             .custom-modal-lg {
                                 max-width: 80%; /* Set to the percentage or pixel width you want */
+                            }
+
+                            .custom-modal-lg-detail {
+                                max-width: 97%; /* Set to the percentage or pixel width you want */
                             }
 
                             .custom-modal-sedang {
@@ -655,6 +831,7 @@
                                     success: function(data) {
                                         let suggestions = data.map(function(item) {
                                             let formattedDate = moment(item.created_at).format('DD-MM-YYYY'); // Format tanggal
+                                            let adminNoteContent = item.adminNote ? item.adminNote : '-';
                                             return `<div class="suggestion-item" 
                                                     data-norm="${item.norm}"
                                                     data-nama="${item.nama}"
@@ -665,18 +842,20 @@
                                                     data-kelurahan="${item.kelurahan}"
                                                     data-kecamatan="${item.kecamatan}"
                                                     data-kota="${item.kota}"
+                                                    data-catatan="${item.adminNote}"
                                                     data-tanggal="${formattedDate}">
-                                                    <div class="suggestion-name">${item.nama}</div>
+                                                    <div class="suggestion-name" style="color: #4e73df">${item.nama}</div>
                                                     <div class="suggestion-columns">
                                                         <div class="suggestion-column">
-                                                            No. Rekam Medis: ${item.norm}<br>
-                                                            Tanggal Lahir: ${item.lahir}<br>
-                                                            Email: ${item.email}
+                                                            <strong>No. Rekam Medis:</strong> ${item.norm}<br>
+                                                            <strong>Tanggal Lahir:</strong> ${item.lahir}<br>
+                                                            <strong>Email:</strong> ${item.email}<br>
+                                                            <strong>No Telepon:</strong> ${item.telepon}<br>
                                                         </div>
                                                         <div class="suggestion-column">
-                                                            No Telepon: ${item.telepon}<br>
-                                                            Alamat: ${[item.kelurahan, item.kecamatan, item.kota].filter(Boolean).join(', ')}<br>
-                                                            Tanggal Ditambah: ${formattedDate}
+                                                            <strong>Alamat:</strong> ${[item.kelurahan, item.kecamatan, item.kota].filter(Boolean).join(', ')}<br>
+                                                            <strong>Tanggal Ditambah:</strong> ${formattedDate}<br>
+                                                            <strong>Catatan Admin:</strong> ${adminNoteContent}<br>
                                                         </div>
                                                     </div>
                                                     </div>`;
@@ -702,21 +881,24 @@
                             let kecamatan = $(this).data('kecamatan');
                             let kota = $(this).data('kota');
                             let tanggal = $(this).data('tanggal');
+                            let catatan = $(this).data('adminNote');
+                            let adminNoteContent = catatan ? catatan : '-';
 
                             $('#customerDetail').html(`
                                 <div class="detail-customer">
-                                    <div class="detail-customer-title">Detail Customer</div>
+                                    <div class="detail-customer-title" style="color: #4e73df">Detail Customer</div>
                                     <div class="detail-customer-content">
                                         <div class="detail-customer-column">
-                                            No Rekam Medis: <span style="color: red">${norm}</span><br>
-                                            Nama: <span style="color: red">${selectedName}</span><br>
-                                            Tanggal Lahir: <span style="color: red">${lahir}</span><br>
-                                            Email: <span style="color: red">${email}</span>
+                                            No Rekam Medis: <span style="color: #4e73df">${norm}</span><br>
+                                            Nama: <span style="color: #4e73df">${selectedName}</span><br>
+                                            Tanggal Lahir: <span style="color: #4e73df">${lahir}</span><br>
+                                            Email: <span style="color: #4e73df">${email}</span>
                                         </div>
                                         <div class="detail-customer-column">
-                                            No Telepon: <span style="color: red">${telepon}</span><br>
-                                            Alamat: <span style="color: red">${[kelurahan, kecamatan, kota].filter(Boolean).join(', ')}</span><br>
-                                            Tanggal Ditambah: <span style="color: red">${tanggal}</span>
+                                            No Telepon: <span style="color: #4e73df">${telepon}</span><br>
+                                            Alamat: <span style="color: #4e73df">${[kelurahan, kecamatan, kota].filter(Boolean).join(', ')}</span><br>
+                                            Tanggal Ditambah: <span style="color: #4e73df">${tanggal}</span><br>
+                                            Catatan: <span style="color: #4e73df">${adminNoteContent}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -812,75 +994,153 @@
                          <!-- script modal detail pasien start -->
 
                         <script>
-                        $(document).ready(function() {
-                        $('#dataTable').on('click', '.detail-btn', function() {
-                            let patientId = $(this).data('id');
+                            $(document).ready(function() {
+                                let currentPatientId; //variabel global untuk menyimpan ID yang akan digunakan untuk edit profile pasien
+                            $('#dataTable').on('click', '.detail-btn', function() {
+                                let patientId = $(this).data('id');
+                                currentPatientId = patientId; // Simpan data-id ke variabel global
+                                
+                                $('.edit-detail-btn').attr('data-id', currentPatientId);
+                                // console.log('ini isi currentPatientId' + currentPatientId)
 
-                            $.ajax({
-                                url: '/get-patient-details/' + patientId,
-                                method: 'GET',
-                                success: function(response) {
-                                    let patient = response.pasien;
-                                    let services = response.services;
-                                    
-                                    let patientDetailTable = $('#patientDetailTable tbody');
-                                    let serviceDetailTable = $('#serviceDetailTable tbody');
-                                    let kelurahan = response.pasien.kelurahan;
-                                    let kecamatan = response.pasien.kecamatan;
-                                    let kota = response.pasien.kota;
-                                    
-                                    // Clear previous data
-                                    patientDetailTable.empty();
-                                    serviceDetailTable.empty();
-                                    
-                                    // Populate patient details
-                                    patientDetailTable.append(`
-                                        <tr>
-                                            <td class="align-middle text-center">${patient.id}</td>
-                                            <td class="align-middle text-center">${patient.norm}</td>
-                                            <td>${patient.nama}</td>
-                                            <td>${patient.gender}</td>
-                                            <td class="align-middle text-center">${patient.age}</td>
-                                            <td class="align-middle text-center">${[kelurahan, kecamatan, kota].filter(Boolean).join(', ')}</td>
-                                            <td>${patient.lahir}</td>
-                                            <td>${patient.email}</td>
-                                            <td>${patient.telepon}</td>
-                                            <td>${patient.rujukan}</td>
-                                        </tr>
-                                    `);
-                                    
-                                    // Populate services details
-                                    if (services.length === 0) {
-                                        serviceDetailTable.append(`
-                                            <tr>
-                                                <td colspan="5" class="text-center">Tidak ada data service tersedia</td>
-                                            </tr>
+                                $.ajax({
+                                    url: '/get-patient-details/' + patientId,
+                                    method: 'GET',
+                                    success: function(response) {
+                                        let patient = response.pasien;
+                                        let services = response.services;
+                                        
+                                        let patientDetailTable = $('#patientDetailTable tbody');
+                                        let serviceDetailTable = $('#serviceDetailTable tbody');
+                                        let kelurahan = response.pasien.kelurahan;
+                                        let kecamatan = response.pasien.kecamatan;
+                                        let kota = response.pasien.kota;
+                                        
+                                        // Clear previous data
+                                        patientDetailTable.empty();
+                                        serviceDetailTable.empty();
+                                        
+                                        let tambahTombol = $('#tambahTombol');
+                                        tambahTombol.append(`
+                                        <td><button style="font-size: 14px" class="d-flex ml-auto btn btn-success ml-2 edit-detail-btn" data-toggle="modal" data-target="#editPatientDetailModal" data-id="${patient.id}">Edit</button></td>
                                         `);
-                                    } else {
-                                        function formatRupiah(number) {
-                                            return new Intl.NumberFormat('id-ID', {
-                                                style: 'currency',
-                                                currency: 'IDR'
-                                            }).format(number);
-                                        }
-                                        // Mengisi tabel dengan data service jika ada
-                                        services.forEach(function(service, index) {
-                                            let formattedBiaya = formatRupiah(service.harga_bayar);
+
+                                        // Populate patient details
+                                        patientDetailTable.append(`
+                                            <tr>
+                                                <td class="align-middle text-center">${patient.id}</td>
+                                                <td class="align-middle text-center">${patient.norm}</td>
+                                                <td>${patient.nama}</td>
+                                                <td>${patient.gender}</td>
+                                                <td class="align-middle text-center">${patient.age}</td>
+                                                <td class="align-middle text-center">${[kelurahan, kecamatan, kota].filter(Boolean).join(', ')}</td>
+                                                <td>${patient.lahir}</td>
+                                                <td>${patient.email}</td>
+                                                <td>${patient.telepon}</td>
+                                                <td>${patient.rujukan}</td>
+                                                <td>${patient.adminNote ? patient.adminNote : '-'}</td>
+                                                
+                                                </tr>
+                                        `);
+                                        
+                                        // Populate services details
+                                        if (services.length === 0) {
                                             serviceDetailTable.append(`
                                                 <tr>
-                                                    <td class="align-middle text-center">${index + 1}</td>
-                                                    <td class="align-middle text-center">${service.tanggal}</td>
-                                                    <td class="align-middle text-center">${service.service.service}</td>
-                                                    <td class="align-middle text-center">${formattedBiaya}</td>
-                                                    <td class="align-middle text-center">${service.dentist.nama_dokter}</td>
+                                                    <td colspan="5" class="text-center">Tidak ada data service tersedia</td>
                                                 </tr>
                                             `);
-                                        });
+                                        } else {
+                                            function formatRupiah(number) {
+                                                return new Intl.NumberFormat('id-ID', {
+                                                    style: 'currency',
+                                                    currency: 'IDR'
+                                                }).format(number);
+                                            }
+                                            // Mengisi tabel dengan data service jika ada
+                                            services.forEach(function(service, index) {
+                                                let formattedBiaya = formatRupiah(service.harga_bayar);
+                                                serviceDetailTable.append(`
+                                                    <tr>
+                                                        <td class="align-middle text-center">${index + 1}</td>
+                                                        <td class="align-middle text-center">${service.tanggal}</td>
+                                                        <td class="align-middle text-center">${service.service.service}</td>
+                                                        <td class="align-middle text-center">${formattedBiaya}</td>
+                                                        <td class="align-middle text-center">${service.dentist.nama_dokter}</td>
+                                                    </tr>
+                                                `);
+                                            });
+                                        }
                                     }
-                                }
+                                });
+
+                                
+                                
                             });
+
+                            
+                            
+                            $('#patientDetailModal').on('click', '.edit-detail-btn', function() {
+                                
+                                let patientId = $(this).data('id');
+                                // console.log(patientId);
+                                // console.log('Ini adalah isi patientId' + patientId);
+
+                                $.ajax({
+                                    url: '/pasien/' + patientId,
+                                    method: 'GET',
+                                    success: function(response) {
+
+                                        
+                                        // Mengisi value di masing-masing input
+                                        $('#editnamaCustomer').val(response.nama);
+                                        $('#editgender').val(response.gender);
+                                        $('#edittanggalLahir').val(response.lahir);
+                                        $('#editage').val(response.age);
+                                        $('#editemail').val(response.email);
+                                        $('#editnoTelepon').val(response.telepon);
+                                        $('#editrujukan').val(response.rujukan);
+                                        $('#editfulladress').val(response.fulladress);
+                                        $('#editkota').val(response.kota);
+                                        $('#editkecamatan').val(response.kecamatan);
+                                        $('#editcatatanAdmin').val(response.adminNote);
+                                        $('#edittanggal').val(response.tanggal);
+                                        $('#editnorm').val(response.norm);
+                                        
+                                        // Menampilkan modal edit
+                                        $('#editPatientDetailModal').modal('show');
+                                    },
+                                    error: function(xhr) {
+                                        console.log(xhr.responseText);
+                                    }
+                                });
+                            });
+
+
+                            $('#patientDetailModal').on('hidden.bs.modal', function() {
+                                $('#tambahTombol').empty(); // Mengosongkan elemen #tambahTombol
+                            });
+
+                            $('#closeEditCustomerFormBtn').on('click', function() {
+                                // Reset form input fields
+                                $('#editProfilePasien')[0].reset();
+
+                                // Reset the data-id attribute on the edit button
+                                $('.edit-detail-btn').attr('data-id', '');
+                            });
+
+                            // Reset form ketika modal ditutup dengan cara lain, seperti mengklik di luar modal
+                            $('#editPatientDetailModal').on('hidden.bs.modal', function () {
+                                $('#editProfilePasien')[0].reset();
+                                $('.edit-detail-btn').attr('data-id', '');
+                            });
+
+                            $('#dataTable').on('click', '.detail-btn', function() {
+                                let patientId = $(this).data('id');
+                                $('.edit-detail-btn').attr('data-id', patientId); // Memastikan data-id diperbarui setiap kali tombol detail diklik
+                            });
+
                         });
-                    });
                         </script>
                         
                         <!-- script modal detail pasien end -->
@@ -1102,4 +1362,29 @@
 
                         <!-- script untuk menambah nomor rekam medis otomatis end -->
 
-                        @endsection
+
+
+
+                        <!-- scritp untuk oppacity modal detail pasien dan edit start -->
+                        
+                        <script>
+                            $('#editPatientDetailModal').on('shown.bs.modal', function () {
+                                var $backdrop = $('.modal-backdrop').last();
+                                $backdrop.css('z-index', parseInt($('#editPatientDetailModal').css('z-index')) - 10);
+                                $backdrop.css('opacity', 0.5); // Menyesuaikan opacity jika perlu
+                            });
+                        </script>
+                            <!-- scritp untuk oppacity modal detail pasien dan edit start -->
+                        
+                        
+
+                            <!-- script untuk edit profile pasien start -->
+                             <script>
+                                $(document).ready(function() {
+                                    
+                                });
+                             </script>
+                            <!-- script untuk edit profile pasien end -->
+                        
+                        
+                            @endsection

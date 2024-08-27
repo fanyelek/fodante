@@ -203,4 +203,11 @@ class PasienController extends Controller
 
         return response()->json(['norm' => $newNorm]);
     }
+
+
+    public function getPasien($id)
+    {
+        $pasien = Pasien::findOrFail($id);
+        return response()->json($pasien);
+    }
 }
