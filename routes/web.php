@@ -18,6 +18,7 @@ Route::post('/import-data-kota', [ImportController::class, 'import_data_kota'])-
 Route::post('/import-data-kunjungan', [ImportController::class, 'import_data_kunjungan'])->name('import-data-kunjungan');
 Route::post('/import-data-dentis', [ImportController::class, 'import_data_dentis'])->name('import-dentis');
 Route::post('/import-data-service', [ImportController::class, 'import_data_service'])->name('import.service');
+Route::get('/export-data-kunjungan', [AdminController::class, 'export_data_kunjungan'])->name('export.kunjungan');
 
 
 
@@ -44,7 +45,9 @@ Route::get('/admin/analisis-kunjungan/',[AdminController::class, 'view_analisis_
 
 
 Route::get('/get-patient-details/{id}', [AdminController::class, 'getPatientDetails']);
+Route::get('/get-item-service-patient/{id}', [AdminController::class, 'get_item_service']);
 Route::delete('/patients-delete/{id}', [AdminController::class, 'hapus_data_pasien'])->name('patients.destroy');
+Route::delete('/delete-item-service-pasien/{id}', [AdminController::class, 'hapus_data_item_service_pasien']);
 
 
 Route::get('/search-lokasi', [AdminController::class, 'search'])->name('search.lokasi');
@@ -63,6 +66,9 @@ Route::post('/store-data-service', [AdminController::class, 'store_service'])->n
 Route::get('/get-service/{id}', [AdminController::class, 'get_service'])->name('get.service');
 Route::put('/update-service/{id}', [AdminController::class, 'updateService'])->name('update-service');
 Route::delete('/service-delete/{id}', [AdminController::class, 'hapus_data_service'])->name('services.destroy');
+Route::post('/update-item-service/{id}', [AdminController::class, 'update_item_service'])->name('service.update');
+Route::get('/search-item-dokter', [AdminController::class, 'get_item_dokter'])->name('get.dokter');
+
 
 
 

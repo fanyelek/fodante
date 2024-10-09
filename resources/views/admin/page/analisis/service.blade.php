@@ -37,13 +37,39 @@
 
 
 <div class="container mt-5">
-        <div class="card">
+        <div class="card shadow mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4>Analisis Layanan</h4>
-                <div class="form-inline">
-                    <div class="form-group">
-                        <label for="bulan" class="mr-2">Filter Bulan:</label>
-                        <input type="month" name="bulan" id="bulan" class="form-control" value="{{ $bulan }}">
+                <h6 class="m-0 font-weight-bold text-primary">Analisis Layanan</h6>
+                <div class="d-flex ml-auto">
+                    <div class="form-inline mr-3">
+                        <div class="form-group">
+                            <label for="bulan" class="mr-2 font-weight-bold text-primary" >Filter Bulan:</label>
+                            <input type="month" name="bulan" id="bulan" class="form-control" value="{{ $bulan }}">
+                        </div>
+                    </div>
+                    
+                    <style>
+                        .separator {
+                                border-left: 1px solid #d1d1d1; /* Warna garis samar */
+                                height: 30px; /* Tinggi garis, sesuaikan dengan kebutuhan */
+                                margin: 0 10px; /* Jarak kiri dan kanan garis */
+                                margin-top: 5px;
+                                display: inline-block; /* Agar elemen tampil sejajar dengan tombol */
+                            }
+                    </style>
+                    
+                    <div class="separator"></div>
+
+                    <div class="dropdown no-arrow ml-2" style="margin-top: 13px">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                            aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">Action:</div>
+                            <button class="dropdown-item" data-toggle="modal" data-target="#exportModal">Export Semua Data Layanan</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -78,6 +104,32 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Modal Export Semua Data Service Pasien Start -->
+
+    <div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportModallLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportModallLabel">Export Data Kunjungan Pasien</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                            <label>Anda yakin untuk mengeksport Data Kunjungan Pasien?</label>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <a href="{{ route('export.kunjungan') }}"><button type="button" class="btn btn-primary">Export</button></a>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Export Semua Data Service Pasien End -->
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

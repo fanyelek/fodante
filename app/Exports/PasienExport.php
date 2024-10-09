@@ -19,25 +19,27 @@ class PasienExport implements FromCollection,  WithHeadings
     /**
     * @return array
     */
+
     public function headings(): array
     {
         return [
             'ID Data Base',
             'No. Rekam Medis',
-            'Jumlah Kunjungan',
             'Tanggal Kunjungan',
             'Nama',
             'Tanggal Lahir',
-            'Age',
-            'Alamat',
-            'No. Telepon',
+            'Umur',
+            'Jenis Kelamin',
+            'Kelurahan',
+            'Kecamatan',
+            'Kota',
+            'Telepon',
             'Email',
-            'Service',
-            'Biaya',
+            'Alamat Lengkap',
             'Catatan Admin',
             'Rujukan',
-            'Data Created_at',
-            'Data Update_at'
+            'created_at',
+            'updated_at',
         ];
     }
 }

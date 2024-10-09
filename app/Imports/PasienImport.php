@@ -19,22 +19,22 @@ class PasienImport implements ToModel
     {
                 
         return new Pasien([
-            'norm'     => $row[0],
-            'tanggal'  => $row[1],
-            // 'kunjungan'  => $row[2],
+            'norm'     => $row[1],
+            'tanggal'  => $row[2],
             'nama'     => $row[3],
             'lahir'    => $row[4],
             'age'      => $row[5],
             'gender'      => $row[6],
-            'fulladress'    => $row[7],
-            'kelurahan'   => $row[8],
-            'kecamatan'   => $row[9],
-            'kota'   => $row[10],
-            'telepon'  => $row[11],
-            'email'    => $row[12],
+            'kelurahan'    => $row[7],
+            'kecamatan'   => $row[8],
+            'kota'   => $row[9],
+            'telepon'   => $row[10],
+            'email'  => $row[11],
+            'fulladdress'    => $row[12],
             'adminNote'  => $row[13],
             'rujukan'  => $row[14],
-            'created_at' => Carbon::createFromFormat('Y/m/d', $row[1])->format('Y-m-d H:i:s'),
+            'created_at' => $row[15],
+            'updated_at' => $row[16],
         ]);
     }
 }

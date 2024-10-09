@@ -12,6 +12,7 @@ use App\Models\DataService;
 use App\Models\DetailServicePasien;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\Dokter;
+use App\Exports\DetailServiceExport;
 
 class AdminController extends Controller
 {
@@ -191,7 +192,29 @@ class AdminController extends Controller
             'services' => $services
         ]);
     }
+
+    public function get_item_service($id)
+    {
+        $services = DetailServicePasien::where('id', $id)->with(['dentist','pasien','service'])->get();
+        
+        return response()->json([
+            'services' => $services
+        ]);
+    }
+
     
+
+
+    public function get_item_dokter()
+    {
+        $dokters = DataDokter::all();
+        
+        return response()->json($dokters);
+    }
+    
+
+
+
     public function hapus_data_pasien($id)
     {
         // Temukan pasien berdasarkan ID dan hapus
@@ -200,6 +223,51 @@ class AdminController extends Controller
         
         // Redirect atau response success
         return response()->json(['success' => true]);
+    }
+    
+    public function hapus_data_item_service_pasien($id)
+    {
+        // Temukan pasien berdasarkan ID dan hapus
+        $item = DetailServicePasien::findOrFail($id);
+        $item->delete();
+        
+        // Redirect atau response success
+        return response()->json(['success' => true]);
+    }
+    
+    public function update_item_service(Request $request, $id)
+    {
+
+        // Validasi data yang diterima
+        $validatedData = $request->validate([
+            'tanggal' => 'required|date',
+            // 'service' => 'required|string|max:255',
+            'tarif' => 'required|numeric',
+            'diskon_klinik' => 'required|numeric',
+            'harga_bayar' => 'required|numeric',
+        ]);
+
+        // Cari data service berdasarkan ID
+        $service = DetailServicePasien::find($id);
+
+        // Pastikan service ada
+        if (!$service) {
+            return response()->json(['error' => 'Service not found'], 404);
+        }
+
+        // Update data service
+        $service->tanggal = $validatedData['tanggal'];
+        // $service->service = $validatedData['service'];
+        $service->tarif = $validatedData['tarif'];
+        $service->diskon_klinik = $validatedData['diskon_klinik'];
+        $service->harga_bayar = $validatedData['harga_bayar'];
+        // $service->dentist = $validatedData['dentist'];
+        $service->save();
+
+        // Kirim respon sukses
+        return response()->json(['success' => 'Data service berhasil diperbarui']);
+    
+
     }
 
 
@@ -307,6 +375,13 @@ class AdminController extends Controller
     public function export_dentist() 
     {
         return Excel::download(new Dokter, 'Data Dokter.xlsx');
+    }
+    
+    
+    public function export_data_kunjungan() 
+    {
+        return Excel::download(new DetailServiceExport, 'detail_service_pasiens.xlsx');
+
     }
     
     

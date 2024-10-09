@@ -166,6 +166,65 @@
                                             #editPatientDetailModal {
                                                 z-index: 1060; /* Z-index lebih tinggi dari modal pertama */
                                             }   
+
+
+
+                                            /*styling untuk dropdown saran pencarian edit service*/
+                                            .input-group {
+                                                position: relative; /* Ini penting untuk mengatur kotak saran di bawah input */
+                                            }
+
+                                            .service-suggestions {
+                                                border: 1px solid #ddd;
+                                                background: #fff;
+                                                max-height: 200px;
+                                                overflow-y: auto;
+                                                position: absolute;
+                                                z-index: 1000;
+                                                width: 100%; /* Sesuaikan dengan lebar input */
+                                                box-sizing: border-box;
+                                                margin-top: 35px;
+                                            }
+
+                                            .suggestion-item-service {
+                                                padding: 8px;
+                                                cursor: pointer;
+                                                border-bottom: 1px solid #ddd;
+                                            }
+
+                                            .suggestion-item-service:last-child {
+                                                border-bottom: none;
+                                            }
+
+                                            .suggestion-item-service:hover {
+                                                background-color: #f1f1f1;
+                                            }
+
+                                            .dentist-suggestions {
+                                                border: 1px solid #ddd;
+                                                background: #fff;
+                                                max-height: 200px;
+                                                overflow-y: auto;
+                                                position: absolute;
+                                                z-index: 1000;
+                                                width: calc(100% - 2px); /* Menyesuaikan dengan lebar input */
+                                                box-sizing: border-box;
+                                                margin-top: 35px;
+                                            }
+
+                                            .suggestion-item-dentist {
+                                                padding: 8px;
+                                                cursor: pointer;
+                                                border-bottom: 1px solid #ddd;
+                                            }
+
+                                            .suggestion-item-dentist:last-child {
+                                                border-bottom: none;
+                                            }
+
+                                            .suggestion-item-dentist:hover {
+                                                background-color: #f0f0f0;
+                                            }
                                         </style>
 
 
@@ -298,7 +357,7 @@
                                                             <input type="text" class="form-control service-name" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
                                                             <input type="number" class="form-control service-cost" name="tarif[]" placeholder="Tarif" required autocomplete="off">
                                                             <input type="text" class="form-control service-diskon" name="diskon_klinik[]" value="0" autocomplete="off">
-                                                            <input type="text" class="form-control service-bayar" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off">
+                                                            <input type="text" class="form-control service-bayar" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off" readonly>
                                                             <div class="input-group-append">
                                                                 <button type="button" class="btn btn-primary add-service-btn">+</button>
                                                             </div>
@@ -598,7 +657,6 @@
                                                             <th class="align-middle text-center">No Telepon</th>
                                                             <th class="align-middle text-center">Rujukan</th>
                                                             <th class="align-middle text-center">Catatan</th>
-                                                            <th class="align-middle text-center">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -618,8 +676,11 @@
                                                             <th class="align-middle text-center">No</th>
                                                             <th class="align-middle text-center">Tanggal Visitasi</th>
                                                             <th class="align-middle text-center">Service</th>
-                                                            <th class="align-middle text-center">Biaya</th>
+                                                            <th class="align-middle text-center">Tarif</th>
+                                                            <th class="align-middle text-center">Diskon Klinik</th>
+                                                            <th class="align-middle text-center">Harga Bayar</th>
                                                             <th class="align-middle text-center">Dentist</th>
+                                                            <th class="align-middle text-center">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -1046,7 +1107,7 @@
                                                 <td>${patient.lahir}</td>
                                                 <td>${patient.email}</td>
                                                 <td>${patient.telepon}</td>
-                                                <td>${patient.rujukan}</td>
+                                                <td>${patient.rujukan ? patient.rujukan : '-'}</td>
                                                 <td>${patient.adminNote ? patient.adminNote : '-'}</td>
                                                 
                                                 </tr>
@@ -1068,14 +1129,41 @@
                                             }
                                             // Mengisi tabel dengan data service jika ada
                                             services.forEach(function(service, index) {
+                                                let formattedTarif = formatRupiah(service.tarif);
+                                                let formattedDiskonKlinik = formatRupiah(service.diskon_klinik);
                                                 let formattedBiaya = formatRupiah(service.harga_bayar);
                                                 serviceDetailTable.append(`
-                                                    <tr>
+                                                    <tr data-row-id="${service.id}">
                                                         <td class="align-middle text-center">${index + 1}</td>
-                                                        <td class="align-middle text-center">${service.tanggal}</td>
-                                                        <td class="align-middle text-center">${service.service.service}</td>
-                                                        <td class="align-middle text-center">${formattedBiaya}</td>
-                                                        <td class="align-middle text-center">${service.dentist.nama_dokter}</td>
+                                                        <td class="align-middle text-center">
+                                                            <input style="font-size: 11px" type="date" class="form-control service-tanggal" value="${service.tanggal}" readonly>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <div class="input-group">
+                                                                    <input style="font-size: 11px" type="text" class="form-control service-name" value="${service.service.service}" readonly>
+                                                                    <span class="clear-input" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; display: none;">
+                                                                        <i class="fas fa-times"></i>
+                                                                    <div class="service-suggestions"></div>
+                                                            </td>
+                                                        </div>
+                                                            <td class="align-middle text-center">
+                                                            <input style="font-size: 11px" type="text" class="form-control service-tarif" value="${formattedTarif}" readonly>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <input style="font-size: 11px" type="text" class="form-control service-diskon-klinik" value="${formattedDiskonKlinik}" readonly>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <input style="font-size: 11px" type="text" class="form-control service-harga-bayar" value="${formattedBiaya}" readonly>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                        <div class="input-group">
+                                                        <input style="font-size: 11px" type="text" class="form-control service-dentist" value="${service.dentist.nama_dokter}" readonly>
+                                                        </div>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <button style="font-size: 11px" class="btn btn-success edit-item-service-btn" data-id="${service.id}">Edit</button>
+                                                            <button style="font-size: 11px" class="btn btn-danger delete-item-service-btn" data-id="${service.id}">Delete</button>
+                                                        </td>
                                                     </tr>
                                                 `);
                                             });
@@ -1157,6 +1245,303 @@
 
 
 
+
+                        <!-- script edit item service start -->
+                         <script>
+                           $(document).ready(function() {
+                                // Fungsi untuk memformat angka ke dalam format rupiah
+                                function formatRupiah(number) {
+                                    let formattedNumber = new Intl.NumberFormat('id-ID', {
+                                        style: 'currency',
+                                        currency: 'IDR',
+                                        minimumFractionDigits: 2, // Menambahkan kembali desimal
+                                        maximumFractionDigits: 2  // Memastikan desimal 2 digit
+                                    }).format(number);
+
+                                    return formattedNumber;
+                                }
+
+                                // Fungsi untuk membersihkan format rupiah
+                                function cleanCurrencyFormat(input) {
+                                    // Menghapus simbol Rp di awal dan ,00 di akhir
+                                    return input.replace(/^Rp\s?|,00$/g, '').replace(/[.]/g, '').trim();
+                                }
+
+                                // Handle Edit Button Click
+                                $('#serviceDetailTable').on('click', '.edit-item-service-btn', function() {
+                                    let serviceId = $(this).data('id');
+                                    let row = $('tr[data-row-id="' + serviceId + '"]');
+
+                                    // Simpan nilai asli dari input untuk bisa dikembalikan nanti
+                                    row.find('input').each(function() {
+                                        $(this).data('original-value', $(this).val());
+                                    });
+
+                                    // Temukan semua input di baris yang sesuai dan hapus atribut readonly
+                                    row.find('input').prop('readonly', false);
+
+                                    // Hapus format rupiah di input biaya, diskon, dan harga bayar
+                                    row.find('.service-tarif').val(cleanCurrencyFormat(row.find('.service-tarif').val()));
+                                    row.find('.service-diskon-klinik').val(cleanCurrencyFormat(row.find('.service-diskon-klinik').val()));
+                                    row.find('.service-harga-bayar').val(cleanCurrencyFormat(row.find('.service-harga-bayar').val()));
+
+                                    // Tampilkan ikon 'x' di dalam input saat dalam mode edit
+                                    row.find('.clear-input').show();  // Tampilkan ikon 'x' untuk membersihkan input
+
+                                    //Ubah input text menjadi date
+                                    row.find('.service-tanggal').attr('type', 'date');
+
+                                    // Ubah tombol edit menjadi tombol save
+                                    $(this).removeClass('edit-item-service-btn btn-success').addClass('save-detail-btn btn-primary').text('Save');
+
+                                    // Ubah tombol delete menjadi tombol cancel
+                                    row.find('.delete-item-service-btn').removeClass('delete-item-service-btn btn-danger').addClass('cancel-edit-btn btn-secondary').text('Cancel');
+                                });
+
+                                // Handle Save Button Click
+                                $('#serviceDetailTable').on('click', '.save-detail-btn', function() {
+                                    let serviceId = $(this).data('id');
+                                    let row = $('tr[data-row-id="' + serviceId + '"]');
+
+                                    // Temukan semua input di baris yang sesuai dan simpan data
+                                    let serviceTanggal = row.find('.service-tanggal').val();
+                                    let serviceName = row.find('.service-name').val();
+                                    let serviceTarif = cleanCurrencyFormat(row.find('.service-tarif').val());  // Bersihkan input tarif
+                                    let serviceDiskon = cleanCurrencyFormat(row.find('.service-diskon-klinik').val()); // Bersihkan input diskon klinik
+                                    let serviceHargaBayar = cleanCurrencyFormat(row.find('.service-harga-bayar').val()); // Bersihkan input harga bayar
+                                    let serviceDentist = row.find('.service-dentist').val();
+
+                                    // Lakukan request AJAX untuk menyimpan data yang telah diubah
+                                    $.ajax({
+                                        url: '/update-item-service/' + serviceId,
+                                        method: 'POST',
+                                        data: {
+                                            tanggal: serviceTanggal,
+                                            service: serviceName,
+                                            tarif: serviceTarif,
+                                            diskon_klinik: serviceDiskon,
+                                            harga_bayar: serviceHargaBayar,
+                                            dentist: serviceDentist,
+                                            _token: $('meta[name="csrf-token"]').attr('content') // CSRF Token
+                                        },
+                                        success: function(response) {
+                                            // Setelah sukses, kembalikan semua input ke readonly
+                                            row.find('input').prop('readonly', true);
+
+                                            // Format kembali angka ke dalam format rupiah dengan desimal
+                                            row.find('.service-tarif').val(formatRupiah(serviceTarif));
+                                            row.find('.service-diskon-klinik').val(formatRupiah(serviceDiskon));
+                                            row.find('.service-harga-bayar').val(formatRupiah(serviceHargaBayar));
+
+                                            // Sembunyikan ikon 'x' setelah data disimpan
+                                            row.find('.clear-input').hide();
+
+                                            // Kembalikan tombol save menjadi tombol edit
+                                            row.find('.save-detail-btn').removeClass('save-detail-btn btn-primary').addClass('edit-item-service-btn btn-success').text('Edit');
+
+                                            // Kembalikan tombol cancel menjadi tombol delete
+                                            row.find('.cancel-edit-btn').removeClass('cancel-edit-btn btn-secondary').addClass('delete-item-service-btn btn-danger').text('Delete');
+                                        },
+                                        error: function(xhr) {
+                                            console.log(xhr.responseText);
+                                        }
+                                    });
+                                });
+
+                                // Handle Cancel Button Click
+                                $('#serviceDetailTable').on('click', '.cancel-edit-btn', function() {
+                                    let serviceId = $(this).data('id');
+                                    let row = $('tr[data-row-id="' + serviceId + '"]');
+
+                                    // Kembalikan nilai input ke nilai asli yang telah disimpan
+                                    row.find('input').each(function() {
+                                        $(this).val($(this).data('original-value')); // Kembalikan nilai asli
+                                    });
+
+                                    // Kembalikan semua input ke readonly
+                                    row.find('input').prop('readonly', true);
+
+                                    // Sembunyikan ikon 'x' setelah cancel
+                                    row.find('.clear-input').hide();
+
+                                    // Kembalikan input date menjadi text
+                                    row.find('.service-tanggal').attr('type', 'date');
+
+                                    // Kembalikan tombol save menjadi tombol edit
+                                    row.find('.save-detail-btn').removeClass('save-detail-btn btn-primary').addClass('edit-item-service-btn btn-success').text('Edit');
+
+                                    // Kembalikan tombol cancel menjadi tombol delete
+                                    $(this).removeClass('cancel-edit-btn btn-secondary').addClass('delete-item-service-btn btn-danger').text('Delete');
+                                });
+
+                                // Handle clear input icon click (ikon 'x')
+                                $('#serviceDetailTable').on('click', '.clear-input', function() {
+                                    $(this).siblings('input').val(''); // Kosongkan input terkait
+                                });
+
+                                // Handle Delete Button Click
+                                $('#serviceDetailTable').on('click', '.delete-item-service-btn', function() {
+                                    let serviceId = $(this).data('id');  // Ambil data-id
+
+                                    // Tampilkan konfirmasi sebelum menghapus
+                                    let confirmation = confirm("Apakah Anda yakin ingin menghapus data ini?");
+                                    
+                                    if (confirmation) {
+                                        // Lakukan request delete ke server
+                                        $.ajax({
+                                            url: '/delete-item-service-pasien/' + serviceId,  // Ganti URL sesuai dengan route yang benar
+                                            method: 'DELETE',
+                                            data: {
+                                                _token: $('meta[name="csrf-token"]').attr('content')  // Kirimkan token CSRF jika diperlukan
+                                            },
+                                            success: function(response) {
+                                                alert("Data berhasil dihapus");
+                                                // Refresh atau hapus baris dari tabel setelah penghapusan
+                                                location.reload();  // Atau bisa pakai cara lain untuk menghapus baris dari tabel
+                                            },
+                                            error: function(xhr) {
+                                                alert("Terjadi kesalahan saat menghapus data");
+                                                console.log(xhr.responseText);
+                                            }
+                                        });
+                                    }
+                                });
+
+                                // Default: Sembunyikan ikon 'x' jika input readonly
+                                $('#serviceDetailTable .clear-input').hide();
+                            });
+                         </script>
+                        <!-- script edit item service end -->
+
+
+
+
+
+                        <!-- script edit item dokter start -->
+                         <script>
+                            $(document).ready(function() {
+
+                                // Fungsi untuk mendapatkan daftar dokter dari database menggunakan AJAX
+                                function getDoctorSuggestions(inputField, suggestionsContainer) {
+                                    $.ajax({
+                                        url: '/search-item-dokter',  // Sesuaikan dengan route untuk mendapatkan daftar dokter
+                                        method: 'GET',
+                                        success: function(response) {
+                                            let suggestions = response.map(function(dokter) {
+                                                return `<div class="suggestion-item-dentist">${dokter.nama_dokter}</div>`;
+                                            }).join('');
+                                            suggestionsContainer.html(suggestions).show();
+                                        },
+                                        error: function(xhr) {
+                                            console.log(xhr.responseText);
+                                        }
+                                    });
+                                }
+
+                                // Handle Edit Button Click (tambahan untuk dentist suggestions)
+                                $('#serviceDetailTable').on('click', '.edit-item-service-btn', function() {
+                                    let serviceId = $(this).data('id');
+                                    let row = $('tr[data-row-id="' + serviceId + '"]');
+                                    
+                                    // Tambahan: Aktifkan klik untuk input dentist untuk saran dokter
+                                    row.find('.service-dentist').on('click', function() {
+                                        let input = $(this);
+                                        let suggestionsContainer = $('<div class="dentist-suggestions"></div>');
+                                        
+                                        // Tambahkan container untuk saran jika belum ada
+                                        if (input.next('.dentist-suggestions').length === 0) {
+                                            input.after(suggestionsContainer);
+                                        } else {
+                                            suggestionsContainer = input.next('.dentist-suggestions');
+                                        }
+                                        
+                                        // Dapatkan saran dokter
+                                        getDoctorSuggestions(input, suggestionsContainer);
+                                    });
+                                });
+
+                                // Pilih saran dokter
+                                $('#serviceDetailTable').on('click', '.suggestion-item-dentist', function() {
+                                    let selectedDentist = $(this).text();
+                                    let dentistInput = $(this).closest('.dentist-suggestions').prev('.service-dentist');
+                                    
+                                    // Masukkan nama dokter yang dipilih ke dalam input
+                                    dentistInput.val(selectedDentist);
+                                    
+                                    // Hapus dropdown suggestions
+                                    $(this).closest('.dentist-suggestions').remove();
+                                });
+
+                                // Sembunyikan saran ketika klik di luar
+                                $(document).click(function(e) {
+                                    if (!$(e.target).closest('.service-dentist, .dentist-suggestions').length) {
+                                        $('.dentist-suggestions').remove(); // Hapus saran ketika klik di luar
+                                    }
+                                });
+                            });
+                         </script>
+                        <!-- script edit item dokter end -->
+
+
+                        
+
+
+                        <!-- script saran pencarian edit service item start -->
+                         <script>
+                            $(document).ready(function() {
+                                // AJAX request untuk saran
+                                $('#serviceDetailTable').on('input', '.service-name', function() {
+                                    let input = $(this);
+                                    let query = input.val();
+                                    let suggestionsContainer = input.next('.service-suggestions'); // Cari kontainer saran yang sudah ada
+
+                                    // Jika kontainer saran belum ada, buat yang baru
+                                    if (suggestionsContainer.length === 0) {
+                                        suggestionsContainer = $('<div class="service-suggestions"></div>').insertAfter(input);
+                                    }
+
+                                    // Jika panjang query lebih dari 1 karakter, lakukan AJAX request
+                                    if (query.length > 1) {
+                                        $.ajax({
+                                            url: '/search-service',
+                                            method: 'GET',
+                                            data: { query: query },
+                                            success: function(data) {
+                                                let suggestions = data.map(function(item) {
+                                                    return `<div class="suggestion-item-service">${item.service}</div>`;
+                                                }).join('');
+                                                suggestionsContainer.html(suggestions).show();
+                                            },
+                                            error: function(error) {
+                                                console.log('Error:', error);
+                                            }
+                                        });
+                                    } else {
+                                        // Jika query kurang dari 2 karakter, sembunyikan saran
+                                        suggestionsContainer.empty().hide();
+                                    }
+                                });
+
+                                // Pilih saran
+                                $('#serviceDetailTable').on('click', '.suggestion-item-service', function() {
+                                    let selectedService = $(this).text();
+                                    $(this).closest('.service-suggestions').prev('.service-name').val(selectedService);
+                                    $(this).parent().remove(); // Hapus saran setelah dipilih
+                                });
+
+                                // Sembunyikan saran ketika klik di luar
+                                $(document).click(function(e) {
+                                    if (!$(e.target).closest('.service-name, .service-suggestions').length) {
+                                        $('.service-suggestions').empty().hide();
+                                    }
+                                });
+                            });
+                         </script>
+                        <!-- script saran pencarian edit service item end -->
+
+
+                        
+
                         <!-- script delete pasien start -->
 
                         <script>
@@ -1191,7 +1576,6 @@
                         </script>
 
                         <!-- script delete pasien end -->
-
 
 
 
@@ -1267,68 +1651,94 @@
                         <!-- script untuk menambahkan service start -->
 
                         <script>
-                        $(document).ready(function() {
-                        // Tambah service baru
-                        $('#service-container').on('click', '.add-service-btn', function() {
-                            var newService = `
-                                <div class="input-group">
-                                    <input type="text" class="form-control service-name mt-4" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
-                                    <input type="number" class="form-control service-cost mt-4" name="tarif[]" placeholder="Tarif" required autocomplete="off">
-                                    <input type="text" class="form-control service-diskon mt-4" name="diskon_klinik[]" placeholder="Diskon Klinik" autocomplete="off">
-                                    <input type="text" class="form-control service-bayar mt-4" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off">
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-danger remove-service-btn mt-4">-</button>
-                                    </div>
-                                </div>
-                                <div class="service-suggestions"></div>`;
-                            $('#service-container').append(newService);
-                        });
+                            $(document).ready(function() {
+                                // Fungsi untuk memformat angka ke dalam format rupiah
+                                function formatRupiah(number) {
+                                    return new Intl.NumberFormat('id-ID', {
+                                        style: 'currency',
+                                        currency: 'IDR',
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }).format(number);
+                                }
 
-                        // Hapus service
-                        $('#service-container').on('click', '.remove-service-btn', function() {
-                            $(this).closest('.input-group').remove();
-                        });
+                                // Tambah service baru
+                                $('#service-container').on('click', '.add-service-btn', function() {
+                                    var newService = `
+                                        <div class="input-group">
+                                            <input type="text" class="form-control service-name mt-4" name="service[]" placeholder="Masukkan Service" autocomplete="off" required>
+                                            <input type="number" class="form-control service-cost mt-4" name="tarif[]" placeholder="Tarif" required autocomplete="off">
+                                            <input type="number" class="form-control service-diskon mt-4" name="diskon_klinik[]" placeholder="Diskon Klinik (Nominal)" value="0" autocomplete="off">
+                                            <input type="text" class="form-control service-bayar mt-4" name="harga_bayar[]" placeholder="Harga Bayar" readonly autocomplete="off">
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-danger remove-service-btn mt-4">-</button>
+                                            </div>
+                                        </div>
+                                        <div class="service-suggestions"></div>`;
+                                    $('#service-container').append(newService);
+                                });
 
-                        // AJAX request untuk saran
-                        $('#service-container').on('input click', '.service-name', function() {
-                            let input = $(this);
-                            let query = input.val();
-                            let suggestionsContainer = input.closest('.input-group').next('.service-suggestions'); // Dapatkan div saran yang tepat
+                                // Hapus service
+                                $('#service-container').on('click', '.remove-service-btn', function() {
+                                    $(this).closest('.input-group').remove();
+                                });
 
-                            if (query.length > 1 || input.is(':focus')) {
-                                $.ajax({
-                                    url: '/search-service', // Ubah URL sesuai dengan route Anda
-                                    method: 'GET',
-                                    data: { query: query },
-                                    success: function(data) {
-                                        let suggestions = data.map(function(item) {
-                                            return `<div class="suggestion-item-service">${item.service}</div>`;
-                                        }).join('');
-                                        suggestionsContainer.html(suggestions).show();
-                                    },
-                                    error: function(error) {
-                                        console.log('Error:', error);
+                                // AJAX request untuk saran
+                                $('#service-container').on('input click', '.service-name', function() {
+                                    let input = $(this);
+                                    let query = input.val();
+                                    let suggestionsContainer = input.closest('.input-group').next('.service-suggestions'); // Dapatkan div saran yang tepat
+
+                                    if (query.length > 1 || input.is(':focus')) {
+                                        $.ajax({
+                                            url: '/search-service', // Ubah URL sesuai dengan route Anda
+                                            method: 'GET',
+                                            data: { query: query },
+                                            success: function(data) {
+                                                let suggestions = data.map(function(item) {
+                                                    return `<div class="suggestion-item-service">${item.service}</div>`;
+                                                }).join('');
+                                                suggestionsContainer.html(suggestions).show();
+                                            },
+                                            error: function(error) {
+                                                console.log('Error:', error);
+                                            }
+                                        });
+                                    } else {
+                                        suggestionsContainer.empty().hide();
                                     }
                                 });
-                            } else {
-                                suggestionsContainer.empty().hide();
-                            }
-                        });
 
-                        // Pilih saran
-                        $('#service-container').on('click', '.suggestion-item-service', function() {
-                            let selectedService = $(this).text();
-                            $(this).closest('.service-suggestions').prev('.input-group').find('.service-name').val(selectedService);
-                            $(this).parent().empty().hide();
-                        });
+                                // Pilih saran
+                                $('#service-container').on('click', '.suggestion-item-service', function() {
+                                    let selectedService = $(this).text();
+                                    $(this).closest('.service-suggestions').prev('.input-group').find('.service-name').val(selectedService);
+                                    $(this).parent().empty().hide();
+                                });
 
-                        // Sembunyikan saran ketika klik di luar
-                        $(document).click(function(e) {
-                            if (!$(e.target).closest('.service-name, .service-suggestions').length) {
-                                $('.service-suggestions').empty().hide();
-                            }
-                        });
-                    });
+                                // Sembunyikan saran ketika klik di luar
+                                $(document).click(function(e) {
+                                    if (!$(e.target).closest('.service-name, .service-suggestions').length) {
+                                        $('.service-suggestions').empty().hide();
+                                    }
+                                });
+
+                                // Perhitungan otomatis harga bayar berdasarkan tarif dan diskon (nominal)
+                                $('#service-container').on('input', '.service-cost, .service-diskon', function() {
+                                    let inputGroup = $(this).closest('.input-group');
+                                    let tarif = parseFloat(inputGroup.find('.service-cost').val()) || 0;
+                                    let diskon = parseFloat(inputGroup.find('.service-diskon').val()) || 0;
+
+                                    // Hitung harga bayar setelah potongan diskon nominal
+                                    let hargaBayar = tarif - diskon;
+
+                                    // Pastikan harga bayar tidak kurang dari 0
+                                    hargaBayar = hargaBayar < 0 ? 0 : hargaBayar;
+
+                                    // Format nilai harga bayar menjadi format rupiah
+                                    inputGroup.find('.service-bayar').val(formatRupiah(hargaBayar));
+                                });
+                            });
                         </script>
 
                         <!-- script untuk menambahkan service end -->

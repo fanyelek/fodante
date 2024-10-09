@@ -25,10 +25,11 @@ return new class extends Migration
             $table->text('kota')->nullable(); // Alamat
             $table->string('telepon'); // No Telepon
             $table->string('email'); // Email
-            $table->text('fulladress')->nullable(); // Alamat
+            $table->text('fulladdress')->nullable(); // Alamat
             $table->text('adminNote')->nullable(); // Catatan
             $table->string('rujukan')->nullable(); // Rujukan
             $table->timestamps(); // created_at dan updated_at otomatis
+            $table->softDeletes();
         });
     }
 

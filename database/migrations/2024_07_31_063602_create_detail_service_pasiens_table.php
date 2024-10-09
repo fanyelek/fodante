@@ -25,6 +25,7 @@ return new class extends Migration
             $table->decimal('harga_bayar', 10, 2);
             $table->text('catatan')->nullable(); // Catatan
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

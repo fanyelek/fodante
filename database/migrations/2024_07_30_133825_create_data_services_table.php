@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('service');            
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
