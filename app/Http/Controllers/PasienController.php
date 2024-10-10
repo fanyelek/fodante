@@ -127,13 +127,22 @@ class PasienController extends Controller
     }
 
     
+    function cleanCurrencyFormat($input) {
+
+        return (int) str_replace("\xC2\xA0", '', str_replace('.', '', preg_replace('/^Rp\s?|,00$/', '', trim($input))));
+        
+    }
+    
     public function store_layanan_pasien(Request $request)
     {
-        // dd($request);
-        // Ambil pasien berdasarkan nama dan tanggal lahir
+        $hargaBayar = $request['harga_bayar'];
+
+        $request->harga_bayar = array_map([$this, 'cleanCurrencyFormat'], $hargaBayar);
+
         $pasien = Pasien::where('nama', $request->nama)
             ->where('lahir', $request->lahir)
             ->first();
+            $hargaBayar = request('harga_bayar'); // Ambil data dari request
     
         // Ambil dokter berdasarkan nama dokter
         $dentist = DataDokter::where('nama_dokter', $request->doctor_name_input)

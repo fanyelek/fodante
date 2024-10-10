@@ -356,7 +356,7 @@
                                                         <div class="input-group">
                                                             <input type="text" class="form-control service-name" name="service[]" placeholder="Masukkan Service" autocomplete="off" required autocomplete="off">
                                                             <input type="number" class="form-control service-cost" name="tarif[]" placeholder="Tarif" required autocomplete="off">
-                                                            <input type="text" class="form-control service-diskon" name="diskon_klinik[]" value="0" autocomplete="off">
+                                                            <input type="text" class="form-control service-diskon" name="diskon_klinik[]" placeholder="Potongan Harga" autocomplete="off">
                                                             <input type="text" class="form-control service-bayar" name="harga_bayar[]" placeholder="Harga Bayar" autocomplete="off" readonly>
                                                             <div class="input-group-append">
                                                                 <button type="button" class="btn btn-primary add-service-btn">+</button>
